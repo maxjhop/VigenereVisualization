@@ -34,8 +34,7 @@ height = screen.get_height()
 # defining a font
 smallfont = pygame.font.SysFont('Corbel', 35)
 
-# rendering a text written in
-# this font
+# rendering a text written in this font
 menu = smallfont.render('Main Menu', True, color)
 play = smallfont.render('Play', True, color)
 pause = smallfont.render('Pause', True, color)
@@ -45,20 +44,46 @@ up = smallfont.render('Speed Up', True, color)
 down = smallfont.render('Slow Down', True, color)
 res = smallfont.render('Restart', True, color)
 
-# buttons and their locations
-options = (menu, play, pause, forw, back, up, down, res)
-names = ("menu", "play", "pause", "forw", "back", "up", "down", "res")
-locY = (5, 50, 95, 140, 185, 230, 275, 320)
 
-#checks if mouse is over a button: bool
-def hover(location):
-    if 5 <= mouse[0] <= 205:
-        for i in locY:
-            if i <= mouse[1] <= i + 40:
-                return True, names[locY.index(i)]
+class button():
     
-    return False, None
+    def __init__(self, y1, text, x1 = 5, x2 = 200, y2 = 40):
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
+        self.text = text
 
+    def draw(self):
+        if self.hover(pygame.mouse.get_pos()):
+            pygame.draw.rect(screen, color_light, [self.x1, self.y1, self.x2, self.y2])
+        else:
+            pygame.draw.rect(screen, color_dark, [self.x1, self.y1, self.x2, self.y2])
+        screen.blit(self.text, (self.x1 + 5, self.y1 + 5))
+
+    def hover(self, mouse):
+        if self.x1 <= mouse[0] <= self.x2 and self.y1 <= mouse[1] <= self.y2:
+            print(mouse)
+            print("Hover True")
+            return True
+        
+        else:
+            print(mouse)
+            print("False")
+            return False
+
+
+# buttons and their locations
+menu_button = button(5, menu)
+play_button = button(50, play)
+pause_button = button(95, pause)
+forw_button = button(140, forw)
+back_button = button(185, back)
+up_button = button(230, up)
+down_button = button(275, down)
+res_button = button(320, res)
+
+buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button, res_button]
 
 while True:
 
@@ -67,7 +92,7 @@ while True:
     mouse = pygame.mouse.get_pos()
 
     # fills the screen with a color
-    screen.fill((60, 0, 0))
+    screen.fill((50, 100, 0))
 
     for ev in pygame.event.get():
 
@@ -79,43 +104,11 @@ while True:
 
             # if the mouse is clicked on a
             # button the game does the thing
-            button = hover(mouse)[1]
-            if button == "menu":
-                pygame.quit()
+            pass
 
-            elif button == "play":
-                pass
-
-            elif button == "pause":
-                pass
-
-            elif button == "for":
-                pass
-
-            elif button == "back":
-                pass
-
-            elif button == "up":
-                pass
-
-            elif button == "down":
-                pass
-
-            elif button == "res":
-                pass
-
-
-
-    #drawing buttons, lighter shade if mouse hovering over one
-    for i in range(len(options)):
-        if hover(mouse)[0]:
-            pygame.draw.rect(screen, color_light, [5, locY[i], 200, 40])
-
-        else:
-            pygame.draw.rect(screen, color_dark, [5, locY[i], 200, 40])
-
-        # superimposing the text onto buttons
-        screen.blit(options[i], (10, locY[i] + 5))
+    #drawing buttons
+    for i in buttons:
+        i.draw()
 
     # updates the frames of the game
     pygame.display.update()
