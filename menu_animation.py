@@ -47,41 +47,44 @@ res = smallfont.render('Restart', True, color)
 
 class button():
     
-    def __init__(self, y1, text, x1 = 5, x2 = 200, y2 = 40):
+    def __init__(self, y1, text, click_funct, x1 = 5, x2 = 200, y2 = 40):
         self.x1 = x1
         self.x2 = x2
         self.y1 = y1
         self.y2 = y2
         self.text = text
+        self.click_funct = click_funct
+
 
     def draw(self):
+        
         if self.hover(pygame.mouse.get_pos()):
+            #print(self.text, self.x1, self.x2, self.y1, self.y2)
             pygame.draw.rect(screen, color_light, [self.x1, self.y1, self.x2, self.y2])
         else:
+            #print(self.text, self.x1, self.x2, self.y1, self.y2)
             pygame.draw.rect(screen, color_dark, [self.x1, self.y1, self.x2, self.y2])
         screen.blit(self.text, (self.x1 + 5, self.y1 + 5))
 
     def hover(self, mouse):
-        if self.x1 <= mouse[0] <= self.x2 and self.y1 <= mouse[1] <= self.y2:
-            print(mouse)
-            print("Hover True")
+        if self.x1 <= mouse[0] <= (self.x1 + self.x2) and self.y1 <= mouse[1] <= (self.y1 + self.y2):
             return True
-        
         else:
-            print(mouse)
-            print("False")
             return False
+
+    def click(self):
+        self.click_funct()
 
 
 # buttons and their locations
-menu_button = button(5, menu)
-play_button = button(50, play)
-pause_button = button(95, pause)
-forw_button = button(140, forw)
-back_button = button(185, back)
-up_button = button(230, up)
-down_button = button(275, down)
-res_button = button(320, res)
+menu_button = button(5, menu, lambda: print("menu"))
+play_button = button(50, play, lambda: print ("play"))
+pause_button = button(95, pause, lambda: print ("pause"))
+forw_button = button(140, forw, lambda: print ("forward"))
+back_button = button(185, back, lambda: print ("back"))
+up_button = button(230, up, lambda: print ("up"))
+down_button = button(275, down, lambda: print ("dpwn"))
+res_button = button(320, res, lambda: print ("res"))
 
 buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button, res_button]
 
@@ -104,7 +107,9 @@ while True:
 
             # if the mouse is clicked on a
             # button the game does the thing
-            pass
+            for i in buttons:
+                if i.hover(mouse):
+                    i.click()
 
     #drawing buttons
     for i in buttons:
