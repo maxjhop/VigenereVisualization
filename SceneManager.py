@@ -1,19 +1,123 @@
-"""
-This is the main project file for the Vigenere Cipher Visualization
-Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
-
-Citations:
-Starter code for basic pygame window was pulled from:
-https://www.geeksforgeeks.org/creating-start-menu-in-pygame/
-
-Inspiration for class setup/scene managers:
-https://nerdparadise.com/programming/pygame/part7
-"""
 import pygame
-import sys
-from SceneManager import *
 
-"""
+
+class SceneManager:
+    def __init__(self):
+        self.scene = self
+
+    def Input(self, events, pressed_keys, mouse):
+        print("Input not overridden")
+
+    def Render(self, screen, mouse):
+        print("Render not overriden")
+
+    def SwitchToScene(self, next_scene):
+        self.scene = next_scene
+
+    def Terminate(self):
+        self.SwitchToScene(None)
+
+
+class button():
+
+    def __init__(self, y1, text, click_funct, x1=5, x2=200, y2=40):
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
+        self.text = text
+        self.click_funct = click_funct
+
+    def draw(self, screen):
+
+        # light shade of the button
+        color_light = (170, 170, 170)
+
+        # dark shade of the button
+        color_dark = (100, 100, 100)
+
+        if self.hover(pygame.mouse.get_pos()):
+            # print(self.text, self.x1, self.x2, self.y1, self.y2)
+            pygame.draw.rect(screen, color_light, [self.x1, self.y1, self.x2, self.y2])
+        else:
+            # print(self.text, self.x1, self.x2, self.y1, self.y2)
+            pygame.draw.rect(screen, color_dark, [self.x1, self.y1, self.x2, self.y2])
+        screen.blit(self.text, (self.x1 + 5, self.y1 + 5))
+
+    def hover(self, mouse):
+        if self.x1 <= mouse[0] <= (self.x1 + self.x2) and self.y1 <= mouse[1] <= (self.y1 + self.y2):
+            return True
+        else:
+            return False
+
+    def click(self):
+        self.click_funct()
+
+
+class ButtonScene(SceneManager):
+    def __init__(self):
+        SceneManager.__init__(self)
+
+        # white color
+        self.color = (255, 255, 255)
+
+        # defining a font
+        self.smallfont = pygame.font.SysFont('Corbel', 35)
+
+        # rendering a text written in this font
+        self.menu = self.smallfont.render('Main Menu', True, self.color)
+        self.play = self.smallfont.render('Play', True, self.color)
+        self.pause = self.smallfont.render('Pause', True, self.color)
+        self.forw = self.smallfont.render('Step Forward', True, self.color)
+        self.back = self.smallfont.render('Step Back', True, self.color)
+        self.up = self.smallfont.render('Speed Up', True, self.color)
+        self.down = self.smallfont.render('Slow Down', True, self.color)
+        self.res = self.smallfont.render('Restart', True, self.color)
+
+        # buttons and their locations
+        menu_button = button(5, self.menu, lambda: self.SwitchToScene(MainMenu()))
+        play_button = button(50, self.play, lambda: print("play"))
+        pause_button = button(95, self.pause, lambda: print("pause"))
+        forw_button = button(140, self.forw, lambda: print("forward"))
+        back_button = button(185, self.back, lambda: print("back"))
+        up_button = button(230, self.up, lambda: print("up"))
+        down_button = button(275, self.down, lambda: print("dpwn"))
+        res_button = button(320, self.res, lambda: print("res"))
+
+        self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
+                        res_button]
+        """
+        while True:
+
+            # stores the (x,y) coordinates into
+            # the variable as a tuple
+            mouse = pygame.mouse.get_pos()
+
+            # fills the screen with a color
+            screen.fill((50, 100, 0))
+        """
+
+    def Input(self, events, pressed_keys, mouse):
+        for ev in events:
+            """
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+            """
+            # checks if a mouse is clicked
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+
+                # if the mouse is clicked on a
+                # button the game does the thing
+                for i in self.buttons:
+                    if i.hover(mouse):
+                        i.click()
+
+    def Render(self, screen, mouse):
+        screen.fill((255, 255, 165))
+        # drawing buttons
+        for i in self.buttons:
+            i.draw(screen)
+
 class MainMenu(SceneManager):
     def __init__(self):
         SceneManager.__init__(self)
@@ -135,48 +239,3 @@ class MainMenu(SceneManager):
         screen.blit(self.title, (self.width / 4, self.height / 8))
         screen.blit(message_input, (self.message_rect.x + 10, self.message_rect.y + 10))
         screen.blit(key_input, (self.key_rect.x + 10, self.key_rect.y + 10))
-"""
-def main():
-
-    # initializing the constructor
-    pygame.init()
-    scene = MainMenu()
-
-    # screen resolution
-    res = (720, 720)
-
-    # opens up a window
-    screen = pygame.display.set_mode(res)
-
-    active_scene = scene
-
-    while True:
-        events = pygame.event.get()
-        pressed_keys = pygame.key.get_pressed()
-        for ev in events:
-
-            if ev.type == pygame.QUIT:
-                pygame.quit()
-
-        # stores the (x,y) coordinates into
-        # the variable as a tuple
-        mouse = pygame.mouse.get_pos()
-
-        active_scene.Input(events, pressed_keys, mouse)
-        active_scene.Render(screen, mouse)
-
-        active_scene = active_scene.scene
-
-        # updates the frames of the game
-        pygame.display.update()
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    main()
