@@ -5,146 +5,190 @@ Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
 Citations:
 Starter code for basic pygame window was pulled from:
 https://www.geeksforgeeks.org/creating-start-menu-in-pygame/
+
+Inspiration for class setup/scene managers:
+https://nerdparadise.com/programming/pygame/part7
 """
 import pygame
 import sys
 
+class SceneManager:
+    def __init__(self):
+        self.scene = self
 
-# initializing the constructor
-pygame.init()
+    def Input(self, events, pressed_keys):
+        print("Input not overridden")
 
-# screen resolution
-res = (720, 720)
+    def Render(self, screen):
+        print("Render not overriden")
 
-# opens up a window
-screen = pygame.display.set_mode(res)
+    def SwitchToScene(self, next_scene):
+        self.scene = next_scene
 
-# white color
-color = (255, 255, 255)
+    def Terminate(self):
+        self.SwitchToScene(None)
 
-# light shade of the button
-color_light = (170, 170, 170)
+class MainMenu(SceneManager):
+    def __init__(self):
+        SceneManager.__init__(self)
+        # white color
+        self.color = (255, 255, 255)
 
-# dark shade of the button
-color_dark = (100, 100, 100)
+        # light shade of the button
+        self.color_light = (170, 170, 170)
 
-# stores the width of the
-# screen into a variable
-width = screen.get_width()
+        # dark shade of the button
+        self.color_dark = (100, 100, 100)
 
-# stores the height of the
-# screen into a variable
-height = screen.get_height()
+        # stores the width of the
+        # screen into a variable
+        self.width = 720
 
-# defining a font
-smallfont = pygame.font.SysFont('Corbel', 35)
-input_smallfont = pygame.font.SysFont('Corbel', 24)
+        # stores the height of the
+        # screen into a variable
+        self.height = 720
 
-# rendering a text written in
-# this font
-encrypt = smallfont.render('encrypt', True, color)
-decrypt = smallfont.render('decrypt', True, color)
-message = smallfont.render("message", True, color_dark)
-key = smallfont.render("key", True, color_dark)
-title = smallfont.render("Vigenere Visualization Tool", True, color_dark)
+        # defining a font
+        self.smallfont = pygame.font.SysFont('Corbel', 35)
+        self.input_smallfont = pygame.font.SysFont('Corbel', 24)
 
-encrypt_rect = pygame.Rect(width / 2, height / 1.5, 140, 40)
-decrypt_rect = pygame.Rect(width / 4, height / 1.5, 140, 40)
-message_rect = pygame.Rect(width / 3.5, height / 4.2, 300, 40)
-key_rect = pygame.Rect(width / 3.5, height / 2.5, 300, 40)
+        # rendering a text written in
+        # this font
+        self.encrypt = self.smallfont.render('encrypt', True, self.color)
+        self.decrypt = self.smallfont.render('decrypt', True, self.color)
+        self.message = self.smallfont.render("message", True, self.color_dark)
+        self.key = self.smallfont.render("key", True, self.color_dark)
+        self.title = self.smallfont.render("Vigenere Visualization Tool", True, self.color_dark)
 
-message_color = color
-key_color = color
-message_active = False
-key_active = False
-message_text = ''
-key_text = ''
+        self.encrypt_rect = pygame.Rect(self.width / 2, self.height / 1.5, 140, 40)
+        self.decrypt_rect = pygame.Rect(self.width / 4, self.height / 1.5, 140, 40)
+        self.message_rect = pygame.Rect(self.width / 3.5, self.height / 4.2, 300, 40)
+        self.key_rect = pygame.Rect(self.width / 3.5, self.height / 2.5, 300, 40)
 
-while True:
+        self.message_color = self.color
+        self.key_color = self.color
+        self.message_active = False
+        self.key_active = False
+        self.message_text = ''
+        self.key_text = ''
 
-    for ev in pygame.event.get():
-
-        if ev.type == pygame.QUIT:
-            pygame.quit()
-
+    def Input(self, events, pressed_keys, mouse):
+        for ev in events:
             # checks if a mouse is clicked
-        if ev.type == pygame.MOUSEBUTTONDOWN:
+            if ev.type == pygame.MOUSEBUTTONDOWN:
 
-            # if the mouse is clicked on the
-            # button the game is terminated
-            if width / 2 <= mouse[0] <= width / 2 + 140 and height / 1.5 <= mouse[1] <= height / 1.5 + 40:
+                # if the mouse is clicked on the
+                # button the game is terminated
+                if self.width / 2 <= mouse[0] <= self.width / 2 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+                    pygame.quit()
+
+                if self.width / 4 <= mouse[0] <= self.width / 4 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+                    pygame.quit()
+
+                if self.message_rect.collidepoint(ev.pos):
+                    self.message_active = True
+                    self.message_color = self.color_light
+                    self.key_color = self.color
+                    self.key_active = False
+
+                if self.key_rect.collidepoint(ev.pos):
+                    self.key_active = True
+                    self.key_color = self.color_light
+                    self.message_color = self.color
+                    self.message_active = False
+
+            if ev.type == pygame.KEYDOWN:
+
+                if self.message_active:
+                    if ev.key == pygame.K_BACKSPACE:
+                        self.message_text = self.message_text[:-1]
+                    else:
+                        self.message_text += ev.unicode
+                elif self.key_active:
+                    if ev.key == pygame.K_BACKSPACE:
+                        self.key_text = self.key_text[:-1]
+                    else:
+                        self.key_text += ev.unicode
+
+    def Render(self, screen, mouse):
+        # fills the screen with a color
+        screen.fill((255, 255, 165))
+
+        pygame.draw.rect
+
+        # if mouse is hovered over encrypt it
+        # changes to lighter shade
+        if self.width / 2 <= mouse[0] <= self.width / 2 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+            pygame.draw.rect(screen, self.color_light, self.encrypt_rect)
+
+        else:
+            pygame.draw.rect(screen, self.color_dark, self.encrypt_rect)
+
+        # if mouse is hovered over decrypt it
+        # changes to lighter shade
+        if self.width / 4 <= mouse[0] <= self.width / 4 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+            pygame.draw.rect(screen, self.color_light, self.decrypt_rect)
+
+        else:
+            pygame.draw.rect(screen, self.color_dark, self.decrypt_rect)
+
+        message_input = self.input_smallfont.render(self.message_text, True, self.color_dark)
+        key_input = self.input_smallfont.render(self.key_text, True, self.color_dark)
+
+        pygame.draw.rect(screen, self.message_color, self.message_rect)
+        pygame.draw.rect(screen, self.key_color, self.key_rect)
+
+        # superimposing text onto our buttons
+        screen.blit(self.encrypt, (self.width / 2 + 10, self.height / 1.5))
+        screen.blit(self.decrypt, (self.width / 4 + 10, self.height / 1.5))
+
+        screen.blit(self.message, (self.width / 2.5, self.height / 3.5))
+        screen.blit(self.key, (self.width / 2.2, self.height / 2.2))
+        screen.blit(self.title, (self.width / 4, self.height / 8))
+        screen.blit(message_input, (self.message_rect.x + 10, self.message_rect.y + 10))
+        screen.blit(key_input, (self.key_rect.x + 10, self.key_rect.y + 10))
+
+def main():
+
+    # initializing the constructor
+    pygame.init()
+    scene = MainMenu()
+
+    # screen resolution
+    res = (720, 720)
+
+    # opens up a window
+    screen = pygame.display.set_mode(res)
+
+    active_scene = scene
+
+    while True:
+        events = pygame.event.get()
+        pressed_keys = pygame.key.get_pressed()
+        for ev in events:
+
+            if ev.type == pygame.QUIT:
                 pygame.quit()
 
-            if width / 4 <= mouse[0] <= width / 4 + 140 and height / 1.5 <= mouse[1] <= height / 1.5 + 40:
-                pygame.quit()
+        # stores the (x,y) coordinates into
+        # the variable as a tuple
+        mouse = pygame.mouse.get_pos()
 
-            if message_rect.collidepoint(ev.pos):
-                message_active = True
-                message_color = color_light
-                key_color = color
-                key_active = False
+        active_scene.Input(events, pressed_keys, mouse)
+        active_scene.Render(screen, mouse)
 
-            if key_rect.collidepoint(ev.pos):
-                key_active = True
-                key_color = color_light
-                message_color = color
-                message_active = False
+        active_scene = active_scene.scene
 
-        if ev.type == pygame.KEYDOWN:
-
-
-            if message_active:
-                if ev.key == pygame.K_BACKSPACE:
-                    message_text = message_text[:-1]
-                else:
-                    message_text += ev.unicode
-            elif key_active:
-                if ev.key == pygame.K_BACKSPACE:
-                    key_text = key_text[:-1]
-                else:
-                    key_text += ev.unicode
+        # updates the frames of the game
+        pygame.display.update()
 
 
 
-    # fills the screen with a color
-    screen.fill((255,255,165))
 
-    # stores the (x,y) coordinates into
-    # the variable as a tuple
-    mouse = pygame.mouse.get_pos()
 
-    pygame.draw.rect
 
-    # if mouse is hovered over encrypt it
-    # changes to lighter shade
-    if width / 2 <= mouse[0] <= width / 2 + 140 and height / 1.5 <= mouse[1] <= height / 1.5 + 40:
-        pygame.draw.rect(screen, color_light, encrypt_rect)
 
-    else:
-        pygame.draw.rect(screen, color_dark, encrypt_rect)
 
-    # if mouse is hovered over decrypt it
-    # changes to lighter shade
-    if width / 4 <= mouse[0] <= width / 4 + 140 and height / 1.5 <= mouse[1] <= height / 1.5 + 40:
-        pygame.draw.rect(screen, color_light, decrypt_rect)
 
-    else:
-        pygame.draw.rect(screen, color_dark, decrypt_rect)
-
-    message_input = input_smallfont.render(message_text, True, color_dark)
-    key_input = input_smallfont.render(key_text, True, color_dark)
-
-    pygame.draw.rect(screen, message_color, message_rect)
-    pygame.draw.rect(screen, key_color, key_rect)
-
-    # superimposing text onto our buttons
-    screen.blit(encrypt, (width / 2+ 10 , height / 1.5))
-    screen.blit(decrypt, (width / 4+ 10 , height / 1.5))
-    screen.blit(message, (width / 2.5 , height / 3.5))
-    screen.blit(key, (width / 2.2, height / 2.2))
-    screen.blit(title, (width / 4, height / 8))
-    screen.blit(message_input, (message_rect.x +10, message_rect.y +10))
-    screen.blit(key_input, (key_rect.x +10, key_rect.y +10))
-
-    # updates the frames of the game
-    pygame.display.update()
+if __name__ == "__main__":
+    main()
