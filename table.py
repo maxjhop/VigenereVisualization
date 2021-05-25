@@ -2,7 +2,7 @@ import sys, pygame as pg
 from pygame.draw import line
 
 pg.init()
-screen_size = 850, 850
+screen_size = 1150, 825
 screen = pg.display.set_mode(screen_size)
 font = pg.font.SysFont(None, 30)
 pg.display.set_caption('Table')
