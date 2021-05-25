@@ -31,10 +31,19 @@ def draw_letters():
     while row < 26:
         col = 0
         while col < 26:
+            if (col == 3):
+                pg.draw.rect(screen, pg.Color("yellow"), pg.Rect((col * 30 + offset - 2) - 5, (row * 30 + offset) - 5, 25, 23))
+            if (row == 2):
+                pg.draw.rect(screen, pg.Color("yellow"), pg.Rect((col*30 + offset -2)-5, (row*30 + offset)-5, 25, 23))
+            if (row == 2) and (col == 3):
+                pg.draw.rect(screen, pg.Color("orange"), pg.Rect((col*30 + offset -2)-5, (row*30 + offset)-5, 25, 23))
+
+
             output = letter_grid[row][col]
             # print(str(output))
             n_text = font.render(str(output), True, pg.Color('black'))
             screen.blit(n_text, pg.Vector2((col*30 + offset - 2), (row * 30 + offset)))
+
             col += 1
         row += 1
 
