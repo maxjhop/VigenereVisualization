@@ -161,6 +161,10 @@ class MainMenu(SceneManager):
         self.key_active = False
         self.message_text = ''
         self.key_text = ''
+        self.validCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -195,12 +199,15 @@ class MainMenu(SceneManager):
                     if ev.key == pygame.K_BACKSPACE:
                         self.message_text = self.message_text[:-1]
                     else:
-                        self.message_text += ev.unicode
+                        if ev.unicode in self.validCharacters:
+                            self.message_text += ev.unicode
+
                 elif self.key_active:
                     if ev.key == pygame.K_BACKSPACE:
                         self.key_text = self.key_text[:-1]
                     else:
-                        self.key_text += ev.unicode
+                        if ev.unicode in self.validCharacters:
+                            self.key_text += ev.unicode
 
     def Render(self, screen, mouse):
         # fills the screen with a color
