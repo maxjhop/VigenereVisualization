@@ -21,11 +21,6 @@ alpha2index = {"a":0, "b":1, "c":2, "d":3, "e":4, "f":5, "g":6, "h":7, "i":8, "j
 # ==================================================================== Encryption Function ==========================================================================
 
 def Encrypt(plainText, Keyword):
-    # Error Handling. plainText and Keyword inputs must be strings
-    if ((type(plainText) != str) or (type(Keyword) != str)):
-        print("ERROR! Inputs must be string")
-        return None
-    
     keyword = Keyword.replace(" ", "").lower() # Remove any spaces and uppercase letters from the keyword
 
     # Error Handling. Make sure the keyword is not an empty string
@@ -41,6 +36,8 @@ def Encrypt(plainText, Keyword):
     # This variable represents the current index into the keyword string
     keywordIndex = 0
 
+    inst = []
+    
     # 'length' is the length of the keyword. Since the plaintext is most likely going to be longer than
     # the keyword, this length variable is used to calculate an appropriate index into the keyword string
     # via remainder (modulo) division. 
@@ -56,8 +53,12 @@ def Encrypt(plainText, Keyword):
         if (letter != " " and letter.isalpha()): # If the current letter is not a space
 
             # The following line calculates the index of the encrypted letter in the alphabet. It does this by adding
-            # together the indices of the plaintext letter and keyword letter in the alphabet. 
+            # together the indices of the plaintext letter and keyword letter in the alphabet.
+            ind1 = alpha2index[letter.lower()]
+            ind2 = alpha2index[keyword[keywordIndex]]
             encryptLetterIndex = (alpha2index[letter.lower()] + alpha2index[keyword[keywordIndex]]) % 26
+
+            inst.append((ind1, ind2, encryptLetterIndex))
 
             # This uses the previously calculated index to find the encrypted letter in the alphabet
             char = index2alpha[encryptLetterIndex]
@@ -73,17 +74,13 @@ def Encrypt(plainText, Keyword):
             char = letter # Add whatever character it is to the encrypted string
 
         retStr = retStr + char # Add the character to the return string
-    return retStr
+    #return result, list of indices, original plaintext, and original keyword
+    return (retStr, inst, plainText, Keyword)
 
 # ===================================================================================================================================================================
 # ==================================================================== Decryption Function ==========================================================================
 
 def Decrypt(cipherText, Keyword):
-    # Error Handling. plainText and Keyword inputs must be strings
-    if ((type(cipherText) != str) or (type(Keyword) != str)):
-        print("ERROR! Inputs must be string")
-        return None
-    
     keyword = Keyword.replace(" ", "").lower() # Remove any spaces and uppercase letters from the keyword
     
     # Error Handling. Make sure the keyword is not an empty string
@@ -103,6 +100,8 @@ def Decrypt(cipherText, Keyword):
     # via remainder (modulo) division.
     keywordLength = len(keyword)
 
+    inst = []
+    
     # retStr is a string that will contain the decrypted text after the decryption process has finished
     retStr = ""
     
@@ -113,15 +112,19 @@ def Decrypt(cipherText, Keyword):
         if (letter != " " and letter.isalpha()): # If the current letter is not a space
 
             # The following line calculates the index of the decrypted letter in the alphabet. It does this by subtracting
-            # the indices of the ciphertext letter and keyword letter from each other 
+            # the indices of the ciphertext letter and keyword letter from each other
+            ind1 = alpha2index[letter.lower()]
+            ind2 = alpha2index[keyword[keywordIndex]]
             decryptLetterIndex = (alpha2index[letter.lower()] - alpha2index[keyword[keywordIndex]]) % 26
 
+            inst.append((decryptLetterIndex, ind2, decryptLetterIndex))
+            
             # This uses the previously calculated index to find the encrypted letter in the alphabet
             char = index2alpha[decryptLetterIndex]
 
             # If the plaintext letter is uppercase, then the encrypted letter will also be upper case. 
             if (letter.isupper()):
-                char = char.upper() # Set the decrypted character to an upper case version of itself
+                char = char.upper() # The charater to be added to the result string is a space
 
             # Increment the keyword index to simulate a 'repeating' keyword
             keywordIndex = (keywordIndex + 1) % keywordLength
@@ -130,4 +133,5 @@ def Decrypt(cipherText, Keyword):
             char = letter # Add whatever character it is to the decrypted string
 
         retStr = retStr + char # Add the character to the return string
-    return retStr
+    #return result, list of indices, original cipher text, and original keyword
+    return (retStr, inst, cipherText, Keyword)
