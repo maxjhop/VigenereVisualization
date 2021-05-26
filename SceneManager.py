@@ -1,5 +1,5 @@
 import pygame
-
+from table import *
 
 class SceneManager:
     def __init__(self):
@@ -20,7 +20,7 @@ class SceneManager:
 
 class button():
 
-    def __init__(self, y1, text, click_funct, x1=5, x2=200, y2=40):
+    def __init__(self, y1, text, click_funct, x1=5, x2=150, y2=30):
         self.x1 = x1
         self.x2 = x2
         self.y1 = y1
@@ -58,11 +58,19 @@ class ButtonScene(SceneManager):
     def __init__(self):
         SceneManager.__init__(self)
 
+        print("BUTTON SCENE INIT")
+        self.table = Table()
+
+        self.inst = [(0, 10), (19,7), (3, 20), (15, 15), (13, 19), (7, 5), (2, 6), (6, 23), (11, 16)]
+        self.ind = 0
+        
+        self.timer = 0
+
         # white color
         self.color = (255, 255, 255)
 
         # defining a font
-        self.smallfont = pygame.font.SysFont('Corbel', 35)
+        self.smallfont = pygame.font.SysFont('Corbel', 25)
 
         # rendering a text written in this font
         self.menu = self.smallfont.render('Main Menu', True, self.color)
@@ -76,13 +84,13 @@ class ButtonScene(SceneManager):
 
         # buttons and their locations
         menu_button = button(5, self.menu, lambda: self.SwitchToScene(MainMenu()))
-        play_button = button(50, self.play, lambda: print("play"))
-        pause_button = button(95, self.pause, lambda: print("pause"))
-        forw_button = button(140, self.forw, lambda: print("forward"))
-        back_button = button(185, self.back, lambda: print("back"))
-        up_button = button(230, self.up, lambda: print("up"))
-        down_button = button(275, self.down, lambda: print("dpwn"))
-        res_button = button(320, self.res, lambda: print("res"))
+        play_button = button(40, self.play, lambda: print("play"))
+        pause_button = button(75, self.pause, lambda: print("pause"))
+        forw_button = button(110, self.forw, lambda: print("forward"))
+        back_button = button(145, self.back, lambda: print("back"))
+        up_button = button(180, self.up, lambda: print("up"))
+        down_button = button(215, self.down, lambda: print("dpwn"))
+        res_button = button(250, self.res, lambda: print("res"))
 
         self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
                         res_button]
@@ -113,10 +121,22 @@ class ButtonScene(SceneManager):
                         i.click()
 
     def Render(self, screen, mouse):
-        screen.fill((255, 255, 165))
+        #screen.fill((255, 255, 165))
         # drawing buttons
         for i in self.buttons:
             i.draw(screen)
+
+    def update(self, board, size):
+        if (self.timer == 0):
+            screen.fill((255, 255, 165))
+            for i in self.buttons:
+                i.draw(screen)
+            x = size[0] - 850
+            board.blit(self.table.screen, (x, 20))
+            self.table.display(self.inst[self.ind][0], self.inst[self.ind][1])
+            self.ind = (self.ind + 1) % len(self.inst)
+        self.timer = (self.timer + 1) % 30
+        return None
 
 class MainMenu(SceneManager):
     def __init__(self):
@@ -161,10 +181,6 @@ class MainMenu(SceneManager):
         self.key_active = False
         self.message_text = ''
         self.key_text = ''
-        self.validCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -199,15 +215,12 @@ class MainMenu(SceneManager):
                     if ev.key == pygame.K_BACKSPACE:
                         self.message_text = self.message_text[:-1]
                     else:
-                        if ev.unicode in self.validCharacters:
-                            self.message_text += ev.unicode
-
+                        self.message_text += ev.unicode
                 elif self.key_active:
                     if ev.key == pygame.K_BACKSPACE:
                         self.key_text = self.key_text[:-1]
                     else:
-                        if ev.unicode in self.validCharacters:
-                            self.key_text += ev.unicode
+                        self.key_text += ev.unicode
 
     def Render(self, screen, mouse):
         # fills the screen with a color
@@ -246,3 +259,6 @@ class MainMenu(SceneManager):
         screen.blit(self.title, (self.width / 4, self.height / 8))
         screen.blit(message_input, (self.message_rect.x + 10, self.message_rect.y + 10))
         screen.blit(key_input, (self.key_rect.x + 10, self.key_rect.y + 10))
+
+    def update(self, board, size):
+        return None
