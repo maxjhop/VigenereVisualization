@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="48c104d5-8a0e-41e5-b6e1-b529a19639e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resizing/SceneManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Resizing/SceneManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VisualizationTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/VisualizationTest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

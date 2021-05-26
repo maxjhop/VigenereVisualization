@@ -20,7 +20,7 @@ class SceneManager:
 
 class button():
 
-    def __init__(self, y1, text, click_funct, x1=5, x2=200, y2=40):
+    def __init__(self, y1, text, click_funct, x1=5, x2=150, y2=30):
         self.x1 = x1
         self.x2 = x2
         self.y1 = y1
@@ -70,7 +70,7 @@ class ButtonScene(SceneManager):
         self.color = (255, 255, 255)
 
         # defining a font
-        self.smallfont = pygame.font.SysFont('Corbel', 35)
+        self.smallfont = pygame.font.SysFont('Corbel', 25)
 
         # rendering a text written in this font
         self.menu = self.smallfont.render('Main Menu', True, self.color)
@@ -84,13 +84,13 @@ class ButtonScene(SceneManager):
 
         # buttons and their locations
         menu_button = button(5, self.menu, lambda: self.SwitchToScene(MainMenu()))
-        play_button = button(50, self.play, lambda: print("play"))
-        pause_button = button(95, self.pause, lambda: print("pause"))
-        forw_button = button(140, self.forw, lambda: print("forward"))
-        back_button = button(185, self.back, lambda: print("back"))
-        up_button = button(230, self.up, lambda: print("up"))
-        down_button = button(275, self.down, lambda: print("dpwn"))
-        res_button = button(320, self.res, lambda: print("res"))
+        play_button = button(40, self.play, lambda: print("play"))
+        pause_button = button(75, self.pause, lambda: print("pause"))
+        forw_button = button(110, self.forw, lambda: print("forward"))
+        back_button = button(145, self.back, lambda: print("back"))
+        up_button = button(180, self.up, lambda: print("up"))
+        down_button = button(215, self.down, lambda: print("dpwn"))
+        res_button = button(250, self.res, lambda: print("res"))
 
         self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
                         res_button]
