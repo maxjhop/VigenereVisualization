@@ -1,5 +1,6 @@
 import sys, pygame as pg
 from pygame.draw import line
+import time
 
 pg.init()
 screen_size = 1150, 825
@@ -65,17 +66,21 @@ def draw_edge_col():
         screen.blit(n_text, pg.Vector2((col * 30 + offset), 20))
         col += 1
 
-def game_loop():
+def game_loop(plain_text,key):
     for event in pg.event.get():
         if event.type == pg.QUIT: sys.exit()
         elif event.type == pg.KEYDOWN:
                 pg.quit()
                 sys.exit()
     draw_background()
-    draw_and_highlight_letters('F','P')
+    draw_and_highlight_letters(plain_text,key)
     draw_edge_row()
     draw_edge_col()
     pg.display.flip()
 
 while 1:
-    game_loop()
+    plain_text = 'HELLOWORLD'
+    key = "HGOENKSHFB"
+    for i in range(len(plain_text)):
+        game_loop(plain_text[i], key[i])
+        time.sleep(2)
