@@ -7,13 +7,12 @@ screen = pg.display.set_mode(screen_size)
 font = pg.font.SysFont(None, 30)
 pg.display.set_caption('Table')
 letters = ['Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y']
-# letter_grid = [letters.append(letters.pop(0)) for i in range(26)]
 letter_grid = []
 for i in range (26):
     letters.append(letters.pop(0))
     new_letters = letters.copy()
     letter_grid.append(new_letters)
-# print(letter_grid)
+
 def draw_background():
     screen.fill(pg.Color("white"))
     pg.draw.rect(screen, pg.Color("black"), pg.Rect(40,40,780,780),3)
@@ -25,25 +24,24 @@ def draw_background():
 
         i += 1
 
-def draw_letters():
+def draw_and_highlight_letters(plain_text, key):
+    letter_list = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     row = 0
     offset = 50
+    width = 25
+    height = 25
     while row < 26:
         col = 0
         while col < 26:
-            if (col == 3):
-                pg.draw.rect(screen, pg.Color("yellow"), pg.Rect((col * 30 + offset - 2) - 5, (row * 30 + offset) - 5, 25, 23))
-            if (row == 2):
-                pg.draw.rect(screen, pg.Color("yellow"), pg.Rect((col*30 + offset -2)-5, (row*30 + offset)-5, 25, 23))
-            if (row == 2) and (col == 3):
-                pg.draw.rect(screen, pg.Color("orange"), pg.Rect((col*30 + offset -2)-5, (row*30 + offset)-5, 25, 23))
-
-
+            if (plain_text == letter_list[col]):
+                pg.draw.rect(screen, pg.Color("yellow"), pg.Rect((col * 30 + offset - 2) - 5, (row * 30 + offset) - 5, width, height))
+            if (key == letter_list[row]):
+                pg.draw.rect(screen, pg.Color("yellow"), pg.Rect((col*30 + offset -2)-5, (row*30 + offset)-5, width, height))
+            if (plain_text == letter_list[col]) and (key == letter_list[row]):
+                pg.draw.rect(screen, pg.Color("orange"), pg.Rect((col*30 + offset -2)-5, (row*30 + offset)-5, width, height))
             output = letter_grid[row][col]
-            # print(str(output))
             n_text = font.render(str(output), True, pg.Color('black'))
             screen.blit(n_text, pg.Vector2((col*30 + offset - 2), (row * 30 + offset)))
-
             col += 1
         row += 1
 
@@ -70,8 +68,11 @@ def draw_edge_col():
 def game_loop():
     for event in pg.event.get():
         if event.type == pg.QUIT: sys.exit()
+        elif event.type == pg.KEYDOWN:
+                pg.quit()
+                sys.exit()
     draw_background()
-    draw_letters()
+    draw_and_highlight_letters('F','P')
     draw_edge_row()
     draw_edge_col()
     pg.display.flip()

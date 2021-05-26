@@ -34,9 +34,6 @@ def main():
 
             if ev.type == pygame.QUIT:
                 pygame.quit()
-            elif ev.type == pygame.KEYDOWN:
-                pygame.quit()
-                sys.exit()
 
         # stores the (x,y) coordinates into
         # the variable as a tuple
