@@ -79,8 +79,11 @@ def game_loop(plain_text,key):
     pg.display.flip()
 
 while 1:
-    plain_text = 'HELLOWORLD'
-    key = "HGOENKSHFB"
+    plain_text = 'HELLO WORLD'
+    key = "HGOEN KSHFB"
+    pause = 2
     for i in range(len(plain_text)):
+        if i == ' ':
+            time.sleep(pause)
         game_loop(plain_text[i], key[i])
-        time.sleep(2)
+        time.sleep(pause)
