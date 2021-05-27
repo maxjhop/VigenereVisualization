@@ -1,4 +1,5 @@
 import pygame
+from Cipher import Encrypt, Decrypt
 from table import *
 
 class SceneManager:
@@ -55,11 +56,15 @@ class button():
 
 
 class ButtonScene(SceneManager):
-    def __init__(self):
+    def __init__(self, message, key, result, steps):
         SceneManager.__init__(self)
 
         print("BUTTON SCENE INIT")
         self.table = Table()
+        self.message = message
+        self.key = key
+        self.result = result
+        self.steps = steps
 
         self.inst = [(0, 10), (19,7), (3, 20), (15, 15), (13, 19), (7, 5), (2, 6), (6, 23), (11, 16)]
         self.ind = 0
@@ -68,6 +73,7 @@ class ButtonScene(SceneManager):
 
         # white color
         self.color = (255, 255, 255)
+        self.color_dark = (100, 100, 100)
 
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 25)
@@ -94,6 +100,10 @@ class ButtonScene(SceneManager):
 
         self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
                         res_button]
+
+        self.messageText = self.smallfont.render(f"message: {message}", True, self.color_dark)
+        self.keyText = self.smallfont.render(f"key: {key}", True, self.color_dark)
+        self.resultText = self.smallfont.render(f"result: {result}", True, self.color_dark)
         """
         while True:
 
@@ -126,6 +136,10 @@ class ButtonScene(SceneManager):
         for i in self.buttons:
             i.draw(screen)
 
+        screen.blit(self.messageText, (5, 275))
+        screen.blit(self.keyText, (5, 295))
+        screen.blit(self.resultText, (5, 325))
+
     def update(self, board, size):
         if (self.timer == 0):
             screen.fill((255, 255, 165))
@@ -136,6 +150,9 @@ class ButtonScene(SceneManager):
             self.table.display(self.inst[self.ind][0], self.inst[self.ind][1])
             self.ind = (self.ind + 1) % len(self.inst)
         self.timer = (self.timer + 1) % 30
+        screen.blit(self.messageText, (5, 275))
+        screen.blit(self.keyText, (5, 295))
+        screen.blit(self.resultText, (5, 325))
         return None
 
 class MainMenu(SceneManager):
@@ -191,7 +208,8 @@ class MainMenu(SceneManager):
                 # button the game is terminated
                 if self.width / 2 <= mouse[0] <= self.width / 2 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
                     #pygame.quit()
-                    self.SwitchToScene(ButtonScene())
+                    result = Encrypt(self.message_text, self.key_text)
+                    self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1]))
 
                 if self.width / 4 <= mouse[0] <= self.width / 4 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
                     #pygame.quit()
