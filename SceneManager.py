@@ -66,7 +66,12 @@ class ButtonScene(SceneManager):
         self.result = result
         self.steps = steps
 
-        self.inst = [(0, 10), (19,7), (3, 20), (15, 15), (13, 19), (7, 5), (2, 6), (6, 23), (11, 16)]
+        self.paused = False # Used to pause the game
+
+        self.mainSurfaceSize = (0, 0) # Hold the size of the main Surface. Updated in self.update
+        self.mainDisplay = pygame.Surface((1, 1)) # Holds the actual main display. Random initial value will be overwritten by self.update
+
+        self.inst = steps
         self.ind = 0
         
         self.timer = 0
@@ -90,13 +95,13 @@ class ButtonScene(SceneManager):
 
         # buttons and their locations
         menu_button = button(5, self.menu, lambda: self.SwitchToScene(MainMenu()))
-        play_button = button(40, self.play, lambda: print("play"))
-        pause_button = button(75, self.pause, lambda: print("pause"))
-        forw_button = button(110, self.forw, lambda: print("forward"))
-        back_button = button(145, self.back, lambda: print("back"))
+        play_button = button(40, self.play, lambda: self.togglePause(False))
+        pause_button = button(75, self.pause, lambda: self.togglePause(True))
+        forw_button = button(110, self.forw, lambda: self.stepForward())
+        back_button = button(145, self.back, lambda: self.stepBack())
         up_button = button(180, self.up, lambda: print("up"))
         down_button = button(215, self.down, lambda: print("dpwn"))
-        res_button = button(250, self.res, lambda: print("res"))
+        res_button = button(250, self.res, lambda: self.restart())
 
         self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
                         res_button]
@@ -114,6 +119,28 @@ class ButtonScene(SceneManager):
             # fills the screen with a color
             screen.fill((50, 100, 0))
         """
+    def stepBack(self):
+        if (self.paused):
+            self.ind = (self.ind - 2) % len(self.inst)
+            self.displayBoard(self.ind)
+            self.ind = (self.ind + 1) % len(self.inst)
+        return None
+        
+    def stepForward(self):
+        if (self.paused):
+            self.displayBoard(self.ind)
+            self.ind = (self.ind + 1) % len(self.inst)
+        return None
+    
+    def restart(self):
+        self.paused = True
+        self.table.refresh()
+        self.displayBoard(0)
+        self.ind = 0
+        return None
+    
+    def togglePause(self, value):
+        self.paused = value
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -140,19 +167,26 @@ class ButtonScene(SceneManager):
         screen.blit(self.keyText, (5, 295))
         screen.blit(self.resultText, (5, 325))
 
+
+    def displayBoard(self, index):
+        #print("{}   {}".format(self.inst[index], index))
+        screen.fill((255, 255, 165))
+        for i in self.buttons:
+            i.draw(screen)
+        x = self.mainBoardSize[0] - 850
+        self.table.display(self.inst[index][0], self.inst[index][1])
+        self.mainDisplay.blit(self.table.screen, (x, 20))
+        return None
+
     def update(self, board, size):
+        self.mainBoardSize = size
+        self.mainDisplay = board
         if (self.timer == 0):
-            screen.fill((255, 255, 165))
-            for i in self.buttons:
-                i.draw(screen)
-            x = size[0] - 850
-            board.blit(self.table.screen, (x, 20))
-            self.table.display(self.inst[self.ind][0], self.inst[self.ind][1])
-            self.ind = (self.ind + 1) % len(self.inst)
-        self.timer = (self.timer + 1) % 30
-        screen.blit(self.messageText, (5, 275))
-        screen.blit(self.keyText, (5, 295))
-        screen.blit(self.resultText, (5, 325))
+            if (not self.paused):
+                self.displayBoard(self.ind)
+                self.ind = (self.ind + 1) % len(self.inst)
+        if (not self.paused):
+            self.timer = (self.timer + 1) % 30
         return None
 
 class MainMenu(SceneManager):
@@ -209,6 +243,9 @@ class MainMenu(SceneManager):
                 if self.width / 2 <= mouse[0] <= self.width / 2 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
                     #pygame.quit()
                     result = Encrypt(self.message_text, self.key_text)
+                    if (result is None):
+                        print("ERROR CANNOT ENCRYPT NOTHING!")
+                        return None
                     self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1]))
 
                 if self.width / 4 <= mouse[0] <= self.width / 4 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
