@@ -36,6 +36,9 @@ class Table:
         self.save.blit(self.screen, (0, 0))
         return None
 
+    def refresh(self):
+        self.screen.blit(self.save, (0, 0))
+
     def draw_background(self):
         self.screen.fill(pg.Color("white"))
         pg.draw.rect(self.screen, pg.Color("black"), pg.Rect(40,40,780,780),3)
