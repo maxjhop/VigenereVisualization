@@ -67,6 +67,8 @@ class ButtonScene(SceneManager):
         self.steps = steps
         self.mode = mode
 
+        print("Result: {}".format(self.result))
+
         self.pace = 5
         self.updateSpeed = (30 / self.pace) * 5
 
