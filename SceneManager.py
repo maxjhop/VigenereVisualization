@@ -56,7 +56,7 @@ class button():
 
 
 class ButtonScene(SceneManager):
-    def __init__(self, message, key, result, steps):
+    def __init__(self, message, key, result, steps, mode):
         SceneManager.__init__(self)
 
         print("BUTTON SCENE INIT")
@@ -65,6 +65,10 @@ class ButtonScene(SceneManager):
         self.key = key
         self.result = result
         self.steps = steps
+        self.mode = mode
+
+        self.pace = 5
+        self.updateSpeed = (30 / self.pace) * 5
 
         self.paused = False # Used to pause the game
 
@@ -99,8 +103,8 @@ class ButtonScene(SceneManager):
         pause_button = button(75, self.pause, lambda: self.togglePause(True))
         forw_button = button(110, self.forw, lambda: self.stepForward())
         back_button = button(145, self.back, lambda: self.stepBack())
-        up_button = button(180, self.up, lambda: print("up"))
-        down_button = button(215, self.down, lambda: print("dpwn"))
+        up_button = button(180, self.up, lambda: self.speedUp())
+        down_button = button(215, self.down, lambda: self.slowDown())
         res_button = button(250, self.res, lambda: self.restart())
 
         self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
@@ -109,6 +113,7 @@ class ButtonScene(SceneManager):
         self.messageText = self.smallfont.render(f"message: {message}", True, self.color_dark)
         self.keyText = self.smallfont.render(f"key: {key}", True, self.color_dark)
         self.resultText = self.smallfont.render(f"result: {result}", True, self.color_dark)
+
         """
         while True:
 
@@ -119,26 +124,90 @@ class ButtonScene(SceneManager):
             # fills the screen with a color
             screen.fill((50, 100, 0))
         """
+
+    # Updates the self.updateSpeed variable so the self.update() function makes update
+    # to the board at the appropriate rate
+    def updatePace(self):
+        self.updateSpeed = (30 // self.pace) * 5
+        return None
+
+    # This function makes the animation play slower. It is called on the 'slow down'
+    # button presses by the user
+    def slowDown(self):
+        if (self.pace > 1): # Minimum pace is 1
+
+            # decrement the current pace
+            self.pace -= 1
+
+            # update the 'self.updateSpeed' variable with this function call. Having
+            # a separate function may be unecessary for this but it works. 
+            self.updatePace()
+        return None
+
+    # This function makes the animation play faster. It is called on the 'speed up'
+    # button presses by the user
+    def speedUp(self):
+        if (self.pace < 10): # Max pace is 10
+
+            # increment the current pace
+            self.pace += 1
+
+            # update the 'self.updateSpeed' variable with this function call. Having
+            # a separate function may be unecessary for this but it works. 
+            self.updatePace()
+        return None
+
+    # This function displays the previous step in the animation. It can only
+    # be called if the animation is currently paused. It is called on the 'step back'
+    # button presses by the user.
     def stepBack(self):
-        if (self.paused):
+        if (self.paused): # if the animation is currently paused
+
+            # since self.ind generally points to the next step to be shown, the index needs to be
+            # decremented by 2 in order to get the previous step. 
             self.ind = (self.ind - 2) % len(self.inst)
+
+            # display the previous step in the animation
             self.displayBoard(self.ind)
+
+            # increment the index in order to point to the next step to be played
             self.ind = (self.ind + 1) % len(self.inst)
         return None
-        
+
+    # This function displays the next sequential step in the animation. It can only
+    # be called if the animation is currently paused. It is called on the 'step forward'
+    # button presses by the user.
     def stepForward(self):
-        if (self.paused):
-            self.displayBoard(self.ind)
-            self.ind = (self.ind + 1) % len(self.inst)
+        if (self.paused): # if the animation is currently paused
+
+            self.displayBoard(self.ind) # display the next step in the animation
+            
+            self.ind = (self.ind + 1) % len(self.inst) # increment the index
         return None
-    
+
+    # This function stops the current animation process and starts it over from the
+    # first step. It is called on the 'restart' button presses by the user
     def restart(self):
+        # pause the animation so it can't continue to play while it is being reset
         self.paused = True
+
+        # Clear the table of any highlights with the table.refresh method
         self.table.refresh()
+
+        # Call self.displayBoard to show the very first step in the animation
         self.displayBoard(0)
+
+        # Reset the current instruction index
         self.ind = 0
+
+        # Could possibly have something like "self.paused = False" if we want the animation
+        # to start playing automatically after it has been reset. For now the animation stays paused
+        # after resetting and the user has to click 'play' in order to resume the visualization
         return None
-    
+
+    # Toggles the value of the self.pause variable. This is called on the
+    # 'pause'/'play' button presses by the user. A value of true pauses the visualization,
+    # and a value of false resumes/plays the animation. 
     def togglePause(self, value):
         self.paused = value
 
@@ -167,26 +236,58 @@ class ButtonScene(SceneManager):
         screen.blit(self.keyText, (5, 295))
         screen.blit(self.resultText, (5, 325))
 
-
+    # This function handles all functionality related to updating the table display for the scene.
+    # The argument 'index' refers to an index into the instruction list, so that the correct
+    # rows and columns get highlighted
     def displayBoard(self, index):
-        #print("{}   {}".format(self.inst[index], index))
-        screen.fill((255, 255, 165))
-        for i in self.buttons:
-            i.draw(screen)
+        # Fill the screen with a yellowish background. Probably not the best to completely refill
+        # the background on every update. It might be better to fill the background on initialization
+        # in order to cover the previous scene. But this works for now.
+        self.mainDisplay.fill((255, 255, 165))
+
+        # Redraw the buttons and message/keyword/result every update because they are covered by the
+        # previous line which fills the entire screen. 
+        self.Render(self.mainDisplay, None)
+
+        # Change table position based on screen size. If main screen size changes, the table will align itself
+        # to the very right edge of the screen to make as much room for the buttons and message/keyword/result text
+        # as possible. Not sure what happens when screen size is smaller than the table size 
         x = self.mainBoardSize[0] - 850
-        self.table.display(self.inst[index][0], self.inst[index][1])
-        self.mainDisplay.blit(self.table.screen, (x, 20))
+        
+        if (self.mode == 0): # if current mode is encryption
+            # Call table.displayEncrypt
+            self.table.displayEncrypt(self.inst[index][1], self.inst[index][0])
+        else: # if current mode is decryption
+            # Call table.displayDecrypt
+            self.table.displayDecrypt(self.inst[index][1], self.inst[index][0])
+
+        # blit (copy) the table onto the main button scene display at the correct position
+        self.mainDisplay.blit(self.table.screen, (x, 10))
         return None
 
+    # This function is called once per game loop in the main.py file. It adds functionality
+    # for updating the screen at a certain pace
     def update(self, board, size):
         self.mainBoardSize = size
         self.mainDisplay = board
-        if (self.timer == 0):
-            if (not self.paused):
+        if (not self.paused): # if the game is paused, the board should not update
+
+            if (self.timer == 0): # every time the timer == 0, the board updates
+
+                # Call the display board funtion which handles all of the functionality
+                # for actually displaying the updates to the board
                 self.displayBoard(self.ind)
+
+                # Increment the instruction index. Modulo for wrap around, so the animation
+                # plays on repeat
                 self.ind = (self.ind + 1) % len(self.inst)
-        if (not self.paused):
-            self.timer = (self.timer + 1) % 30
+
+                # We could possibly include a feature that pauses the animation when we have reached the end,
+                # so that it is clear that the end of the process has been reached
+                
+            # Increment the timer using modulo, so whenever (timer + 1) == updateSpeed,
+            # the result of modulo division will be 0, and the board will update
+            self.timer = (self.timer + 1) % self.updateSpeed
         return None
 
 class MainMenu(SceneManager):
@@ -246,11 +347,15 @@ class MainMenu(SceneManager):
                     if (result is None):
                         print("ERROR CANNOT ENCRYPT NOTHING!")
                         return None
-                    self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1]))
+                    self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1], 0))
 
                 if self.width / 4 <= mouse[0] <= self.width / 4 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
                     #pygame.quit()
-                    self.SwitchToScene(ButtonScene())
+                    result = Decrypt(self.message_text, self.key_text)
+                    if (result is None):
+                        print("ERROR CANNOT DECRYPT NOTHING!")
+                        return None
+                    self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1], 1))
 
                 if self.message_rect.collidepoint(ev.pos):
                     self.message_active = True

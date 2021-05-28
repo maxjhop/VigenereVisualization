@@ -115,22 +115,36 @@ class Table:
             self.screen.blit(self.letters[pos][0], self.letters[pos][1])
         return None
 
-    def fill_cell(self, row, col):
+    def fill_cell(self, row, col, color):
         index = row*26 + col
-        pg.draw.rect(self.screen, (0, 255, 0), self.cells[index])
+        pg.draw.rect(self.screen, color, self.cells[index])
         self.screen.blit(self.letters[index][0], self.letters[index][1])
         return None
 
-    def display(self, row, column):
+    def fill_edge_cell(self, row, col):
+        tempRect = pg.Rect(self.cells[col].left, self.cells[0].top - 30, 27, 27)
+        pg.draw.rect(self.screen, (0, 255, 0), tempRect)
+        self.screen.blit(self.edgeColLetters[col][0], self.edgeColLetters[col][1])
+        return None
+
+    def displayEncrypt(self, row, column):
         self.screen.blit(self.save, (0, 0))
         self.highlightRow(row)
         self.highlightCol(column)
-        self.fill_cell(row, column)
+        self.fill_cell(row, column, (0, 255, 0))
+        return None
+
+    def displayDecrypt(self, row, column):
+        self.screen.blit(self.save, (0, 0))
+        self.highlightRow(row)
+        self.highlightCol(column)
+        self.fill_cell(row, column, (255, 80, 80))
+        self.fill_edge_cell(row, column)
         return None
 
 def main():
     table = Table()
-    table.display(10, 10)
+    table.displayDecrypt(7, 12)
     while True:
         screen.blit(table.screen, (0, 0))
         events = pg.event.get()
@@ -139,4 +153,5 @@ def main():
             if event.type == pg.QUIT:
                 pg.quit()
         pg.display.update()
+
 
