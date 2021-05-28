@@ -13,6 +13,7 @@ import pygame
 import sys
 from SceneManager import *
 
+
 FPS = 30
 
 def main():
