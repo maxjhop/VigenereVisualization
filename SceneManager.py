@@ -34,6 +34,8 @@ class ButtonScene(SceneManager):
         self.steps = steps
         self.mode = mode
 
+        print("Result: {}".format(self.result))
+
         self.pace = 5
         self.updateSpeed = (30 / self.pace) * 5
 
@@ -245,6 +247,10 @@ class ButtonScene(SceneManager):
     def update(self, board, size):
         self.mainBoardSize = size
         self.mainDisplay = board
+        x = self.mainBoardSize[0] - 850
+        self.mainDisplay.fill((255, 255, 165))
+        self.mainDisplay.blit(self.table.screen, (x, 10))
+        self.Render(self.mainDisplay, None)
         if (not self.paused): # if the game is paused, the board should not update
 
             if (self.timer == 0): # every time the timer == 0, the board updates
