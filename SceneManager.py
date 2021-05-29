@@ -61,7 +61,7 @@ class ButtonScene(SceneManager):
         self.result = self.smallfont.render(result, True, self.color_dark)
 
         # rendering a text written in this font
-        self.menu = self.smallfont.render('Main Menu', True, self.color)
+        self.menu = self.smallfont.render('Go Back', True, self.color)
         self.play = self.smallfont.render('Play', True, self.color)
         self.pause = self.smallfont.render('Pause', True, self.color)
         self.forw = self.smallfont.render('Step Forward', True, self.color)
@@ -71,14 +71,14 @@ class ButtonScene(SceneManager):
         self.res = self.smallfont.render('Restart', True, self.color)
 
         # buttons and their locations
-        menu_button = button(5, self.menu, lambda: self.SwitchToScene(MainMenu()))
-        play_button = button(40, self.play, lambda: self.togglePause(False))
-        pause_button = button(75, self.pause, lambda: self.togglePause(True))
-        forw_button = button(110, self.forw, lambda: self.stepForward())
-        back_button = button(145, self.back, lambda: self.stepBack())
-        up_button = button(180, self.up, lambda: self.speedUp())
-        down_button = button(215, self.down, lambda: self.slowDown())
-        res_button = button(250, self.res, lambda: self.restart())
+        play_button = button(5, self.play, lambda: self.togglePause(False))
+        pause_button = button(40, self.pause, lambda: self.togglePause(True))
+        forw_button = button(75, self.forw, lambda: self.stepForward())
+        back_button = button(110, self.back, lambda: self.stepBack())
+        up_button = button(145, self.up, lambda: self.speedUp())
+        down_button = button(180, self.down, lambda: self.slowDown())
+        res_button = button(215, self.res, lambda: self.restart())
+        menu_button = button(250, self.menu, lambda: self.SwitchToScene(MainMenu()))
 
         self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
                         res_button]
@@ -208,10 +208,10 @@ class ButtonScene(SceneManager):
 
         screen.blit(self.messageText, (5, 285))
         screen.blit(self.message, (5, 305))
-        screen.blit(self.keyText, (5, 325))
-        screen.blit(self.key, (5, 345))
-        screen.blit(self.resultText, (5, 365))
-        screen.blit(self.result, (5, 385))
+        screen.blit(self.keyText, (5, 345))
+        screen.blit(self.key, (5, 365))
+        screen.blit(self.resultText, (5, 405))
+        screen.blit(self.result, (5, 425))
 
     # This function handles all functionality related to updating the table display for the scene.
     # The argument 'index' refers to an index into the instruction list, so that the correct
@@ -303,10 +303,9 @@ class MainMenu(SceneManager):
         self.key = self.smallfont.render("key", True, self.color_dark)
         self.title = self.smallfont.render("Vigenere Visualization Tool", True, self.color_dark)
 
-        self.encrypt_rect = pygame.Rect(self.width / 2, self.height / 1.5, 140, 40)
-        self.decrypt_rect = pygame.Rect(self.width / 4, self.height / 1.5, 140, 40)
-        self.message_rect = pygame.Rect(self.width / 3.5, self.height / 4.2, 300, 40)
-        self.key_rect = pygame.Rect(self.width / 3.5, self.height / 2.5, 300, 40)
+
+
+
 
         self.message_color = self.color
         self.key_color = self.color
@@ -316,10 +315,7 @@ class MainMenu(SceneManager):
         self.key_text = ''
 
         self.menu = self.smallfont.render('Back to Main Menu', True, self.color)
-        menu_button = button(600, self.menu, lambda: self.SwitchToScene(StartMenu()), 200,
-                             280, 40)
 
-        self.buttons = [menu_button]
 
         self.validCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
                                 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -337,7 +333,7 @@ class MainMenu(SceneManager):
 
                 # if the mouse is clicked on the Encryption
                 # button the game is terminated
-                if self.width / 2 <= mouse[0] <= self.width / 2 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+                if self.encrypt_rect.collidepoint(ev.pos):
                     #pygame.quit()
                     result = Encrypt(self.message_text, self.key_text)
                     if (result is None):
@@ -345,7 +341,7 @@ class MainMenu(SceneManager):
                         return None
                     self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1], 0))
 
-                if self.width / 4 <= mouse[0] <= self.width / 4 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+                if self.decrypt_rect.collidepoint(ev.pos):
                     #pygame.quit()
                     result = Decrypt(self.message_text, self.key_text)
                     if (result is None):
@@ -387,12 +383,21 @@ class MainMenu(SceneManager):
 
         pygame.draw.rect
 
+        self.encrypt_rect = pygame.Rect(self.width / 2 + 50, self.height / 1.7, 140, 40)
+        self.decrypt_rect = pygame.Rect(self.width / 2 - 200, self.height / 1.7, 140, 40)
+        self.message_rect = pygame.Rect(self.width / 2 - 150, self.height / 4.2, 300, 40)
+        self.key_rect = pygame.Rect(self.width / 2 - 150, self.height / 2.5, 300, 40)
+        menu_button = button(self.height / 1.3, self.menu, lambda: self.SwitchToScene(StartMenu()), self.width / 2 - 140,
+                             280, 40)
+
+        self.buttons = [menu_button]
+
         for i in self.buttons:
             i.draw(screen)
 
         # if mouse is hovered over encrypt it
         # changes to lighter shade
-        if self.width / 2 <= mouse[0] <= self.width / 2 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+        if self.width / 2 + 50 <= mouse[0] <= self.width / 2 + 50 + 140 and self.height / 1.7 <= mouse[1] <= self.height / 1.7 + 40:
             pygame.draw.rect(screen, self.color_light, self.encrypt_rect)
 
         else:
@@ -400,7 +405,7 @@ class MainMenu(SceneManager):
 
         # if mouse is hovered over decrypt it
         # changes to lighter shade
-        if self.width / 4 <= mouse[0] <= self.width / 4 + 140 and self.height / 1.5 <= mouse[1] <= self.height / 1.5 + 40:
+        if self.width / 2 - 200 <= mouse[0] <= self.width / 2 - 200 + 140 and self.height / 1.7 <= mouse[1] <= self.height / 1.7 + 40:
             pygame.draw.rect(screen, self.color_light, self.decrypt_rect)
 
         else:
@@ -413,17 +418,18 @@ class MainMenu(SceneManager):
         pygame.draw.rect(screen, self.key_color, self.key_rect)
 
         # superimposing text onto our buttons
-        screen.blit(self.encrypt, (self.width / 2 + 10, self.height / 1.5))
-        screen.blit(self.decrypt, (self.width / 4 + 10, self.height / 1.5))
+        screen.blit(self.encrypt, (self.encrypt_rect.x + 10, self.encrypt_rect.y))
+        screen.blit(self.decrypt, (self.decrypt_rect.x + 10, self.decrypt_rect.y))
 
-        screen.blit(self.message, (self.width / 2.5, self.height / 3.5))
-        screen.blit(self.key, (self.width / 2.2, self.height / 2.2))
-        screen.blit(self.title, (self.width / 4, self.height / 8))
+        screen.blit(self.message, (self.width / 2 - 60, self.height / 3.5))
+        screen.blit(self.key, (self.width / 2 - 30, self.height / 2.2))
+        screen.blit(self.title, (self.width / 2 - 200, self.height / 8))
         screen.blit(message_input, (self.message_rect.x + 10, self.message_rect.y + 10))
         screen.blit(key_input, (self.key_rect.x + 10, self.key_rect.y + 10))
 
     def update(self, board, size):
-        return None
+        self.width = size[0]
+        self.height = size[1]
 
 class StartMenu(SceneManager):
     def __init__(self):
@@ -455,12 +461,8 @@ class StartMenu(SceneManager):
         self.menu = self.smallfont.render('Visualization Tool', True, self.color)
         self.info = self.smallfont.render('Info', True, self.color)
         self.quit = self.smallfont.render('Quit', True, self.color)
+        self.buttons = []
 
-        menu_button = button(self.height / 4.2, self.menu, lambda: self.SwitchToScene(MainMenu()), self.width / 2 - 140, 250, 40)
-        info_button = button(self.height / 2.7, self.info, lambda: self.SwitchToScene(InfoMenu()), self.width / 2 - 140, 250, 40, 100)
-        quit_button = button(self.height / 2, self.quit, lambda : pygame.quit(), self.width / 2 - 140, 250, 40, 100)
-
-        self.buttons = [menu_button, info_button, quit_button]
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -478,9 +480,20 @@ class StartMenu(SceneManager):
 
         pygame.draw.rect
 
+        menu_button = button(self.height / 4.2, self.menu, lambda: self.SwitchToScene(MainMenu()), self.width / 2 - 140,
+                             250, 40)
+        info_button = button(self.height / 2.7, self.info, lambda: self.SwitchToScene(InfoMenu()), self.width / 2 - 140,
+                             250, 40, 100)
+        quit_button = button(self.height / 2, self.quit, lambda: pygame.quit(), self.width / 2 - 140, 250, 40, 100)
+        self.buttons = [menu_button, info_button, quit_button]
+
         for i in self.buttons:
             i.draw(screen)
         screen.blit(self.title, (self.width / 2 - 200, self.height / 8))
+
+    def update(self, screen, cursize):
+        self.width = cursize[0]
+        self.height = cursize[1]
 
 class InfoMenu(SceneManager):
     def __init__(self):
