@@ -498,7 +498,7 @@ class StartMenu(SceneManager):
 class InfoMenu(SceneManager):
     def __init__(self):
         SceneManager.__init__(self)
-        print("Information")
+        #print("Information")
 
         # white color
         self.color = (255, 255, 255)
@@ -529,10 +529,6 @@ class InfoMenu(SceneManager):
         self.menu = self.smallfont.render("Go Back", True, self.color)
         self.information = self.smallfont.render("Information", True, self.color_dark)
 
-
-
-
-
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
             """
@@ -552,10 +548,10 @@ class InfoMenu(SceneManager):
         # fills the screen with a color
         screen.fill((255, 255, 165))
         # buttons and their locations/functions
-        about_button = button(self.height / 4.7, self.about, lambda: self.SwitchToScene(AboutCi_1()),
+        about_button = button(self.height / 4.7, self.about, lambda: self.SwitchToScene(About()),
                               self.width / 2 - 140,
                               250, 40, 30)
-        use_button = button(self.height / 2.8, self.use, lambda: self.SwitchToScene(Uses_1()), self.width / 2 - 140,
+        use_button = button(self.height / 2.8, self.use, lambda: self.SwitchToScene(Use()), self.width / 2 - 140,
                             250, 40, 20)
 
         menu_button = button(self.height / 2, self.menu, lambda: self.SwitchToScene(StartMenu()),
@@ -574,7 +570,7 @@ class InfoMenu(SceneManager):
         self.width = size[0]
         self.height = size[1]
 
-class Uses_1(SceneManager):
+class Use(SceneManager):
     def __init__(self):
         SceneManager.__init__(self)
         print("Information")
@@ -602,16 +598,27 @@ class Uses_1(SceneManager):
 
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 35)
+        self.titlefont = pygame.font.SysFont('Corbel', 50, bold = True)
+        self.heading = pygame.font.SysFont('Corbel', 35, bold = True)
         self.input_smallfont = pygame.font.SysFont('Corbel', 24)
 
-        # rendering a text written in
-        # this font
-        self.next = self.smallfont.render('Next', True, self.color)
+        # rendering button and title text
         self.menu = self.smallfont.render("Main Menu", True, self.color)
-        self.title = self.smallfont.render("Using this tool", True, self.color_dark)
+        self.other = self.smallfont.render("Cipher Information", True, self.color)
+        self.title = self.titlefont.render("Using this tool", True, self.color_dark)
 
+        # rendering information text
+        self.text1 = self.smallfont.render("This tool is a visualization of the Vigenere cipher, it can encrypt and decrypt short messages when ", True, self.color_dark)
+        self.text2 = self.smallfont.render("given a key. It is meant to be a learning/ teaching tool to better understand how the Vigenere cipher works,", True, self.color_dark)
+        self.text3 = self.smallfont.render("not a robust encryption/decryption software that can break encryptions", True, self.color_dark)
 
+        self.sub1 = self.heading.render("How to use this tool", True, self.color_dark)
+        self.ins1 = self.smallfont.render("1. From the Main Menu, click on 'Visualization Tool'", True, self.color_dark)
+        self.ins2 = self.smallfont.render("2. Input the text you want encrypted or decryped in the 'message' box", True, self.color_dark)
+        self.ins3 = self.smallfont.render("3. Input the key you want or need used to either encrypty or decrypt the text in the 'key' box", True, self.color_dark)
+        self.ins4 = self.smallfont.render("4. Click on either 'encrypt' or 'decrypt' to process the text", True, self.color_dark)
 
+        self.sub2 = self.heading.render("Controls", True, self.color_dark)
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -634,24 +641,36 @@ class Uses_1(SceneManager):
         # buttons and their locations/functions
         menu_button = button(self.height / 1.1, self.menu, lambda: self.SwitchToScene(StartMenu()), self.width / 2 + 350,
                              170, 40)
-        next_button = button(self.height / 1.1, self.next, lambda: self.SwitchToScene(Uses_2()),
-                             self.width / 2 - 500, 80, 40)
+        other_button = button(self.height / 1.1, self.other, lambda: self.SwitchToScene(About()),
+                             self.width / 2 - 500, 270, 40)
 
-        self.buttons = [menu_button, next_button]
+        self.buttons = [menu_button, other_button]
 
         for i in self.buttons:
             i.draw(screen)
 
         #Title
-        screen.blit(self.title, (self.width / 2 - 100, self.height / 30))
+        screen.blit(self.title, (self.width / 2 - 150, self.height / 30))
 
         #Information
+        screen.blit(self.text1, (150, 120))
+        screen.blit(self.text2, (75, 170))
+        screen.blit(self.text3, (75, 220))
+
+        screen.blit(self.sub1, (75, 300))
+        screen.blit(self.ins1, (150, 350))
+        screen.blit(self.ins2, (150, 400))
+        screen.blit(self.ins3, (150, 450))
+        screen.blit(self.ins4, (150, 500))
+
+        screen.blit(self.sub2, (75, 580))
 
     def update(self, board, size):
         self.width = size[0]
         self.height = size[1]
 
-class Uses_2(SceneManager):
+
+class About(SceneManager):
     def __init__(self):
         SceneManager.__init__(self)
         print("Information")
@@ -679,21 +698,29 @@ class Uses_2(SceneManager):
 
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 35)
+        self.titlefont = pygame.font.SysFont('Corbel', 40, bold = True)
+        self.heading = pygame.font.SysFont('Corbel', 35, bold = True)
         self.input_smallfont = pygame.font.SysFont('Corbel', 24)
 
-        # rendering a text written in
-        # this font
-        self.back = self.smallfont.render('Back', True, self.color)
+        # rendering button and title text
         self.menu = self.smallfont.render("Main Menu", True, self.color)
-        self.next = self.smallfont.render("Next", True, self.color)
-        self.title = self.smallfont.render("Using this tool2", True, self.color_dark)
+        self.other = self.smallfont.render("Tool Information", True, self.color)
+        self.title = self.titlefont.render("Some information on Ciphers", True, self.color_dark)
 
+        #rendering information text
+        self.sub1 = self.heading.render("What is a cipher?", True, self.color_dark)
+        self.text1 = self.smallfont.render("A cipher is a system in which plain text is encoded via transposition or subsititution according to", True, self.color_dark)
+        self.text2 = self.smallfont.render("predetermined system. Some betterknown examples are the Caesar cipher, Enigma code, Morse code, and even", True, self.color_dark)
+        self.text3 = self.smallfont.render("smoke signals. This tool is a visualization of the vigenere cipher.", True, self.color_dark)
 
-        # buttons and their locations/functions
-        menu_button = button(self.height - 20, self.menu, lambda: self.SwitchToScene(StartMenu()), x1 = 20)
-        back_button = button(self.height - 20, self.next, lambda: self.SwitchToScene(Uses_1()), x1 = self.width - 20 - self.x2)
-
-        self.buttons = [menu_button, back_button]
+        self.sub2 = self.heading.render("The Vigenere Cipher", True, self.color_dark)
+        self.txt1 = self.smallfont.render("First descriped in 1553 it remained unbroken for three centries and gained the title 'le chiffre indechiffrable'", True, self.color_dark)
+        self.txt2 = self.smallfont.render("or 'the indecipherable cipher'. The Vigenere cipher uses two alphabets, one for the text to be altered and", True, self.color_dark)
+        self.txt3 = self.smallfont.render("another for the keyword. These two alphabets form a grid of letters, shifting to the left every row/column. The", True, self.color_dark)
+        self.txt4 = self.smallfont.render("colums are for the text and rows for the keyword. The first letter of each are highlighted and the resulting", True, self.color_dark)
+        self.txt5 = self.smallfont.render("encrypted letter is found in the grid. While for decryption the key letter row is highlighted and the encrypted", True, self.color_dark)
+        self.txt6 = self.smallfont.render("letter will find the plain text column. Keywords are repeated until they reach the lenght necessary to encrypt", True, self.color_dark)
+        self.txt7 = self.smallfont.render("the entire message. For example the keyword 'one' would be 'oneoneoneo' for the plain text 'everything'", True, self.color_dark)
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -713,163 +740,36 @@ class Uses_2(SceneManager):
     def Render(self, screen, mouse):
         # fills the screen with a color
         screen.fill((255, 255, 165))
-
-        for i in self.buttons:
-            i.draw(screen)
-
-        #Title
-        screen.blit(self.title, (self.width / 2.5, self.height / 3.5))
-
-        #Information
-
-    def update(self, board, size):
-        return None
-
-
-class AboutCi_1(SceneManager):
-    def __init__(self):
-        SceneManager.__init__(self)
-        print("Information")
-
-        # white color
-        self.color = (255, 255, 255)
-
-        # light shade of the button
-        self.color_light = (170, 170, 170)
-
-        # dark shade of the button
-        self.color_dark = (100, 100, 100)
-
-        # stores the width of the
-        # screen into a variable
-        self.width = 720
-
-        # stores the height of the
-        # screen into a variable
-        self.height = 720
-
-        self.x2 = 75
-
-        self.y2 = 30
-
-        # defining a font
-        self.smallfont = pygame.font.SysFont('Corbel', 35)
-        self.input_smallfont = pygame.font.SysFont('Corbel', 24)
-
-        # rendering a text written in
-        # this font
-        self.next = self.smallfont.render('Next (Vigenere Cipher)', True, self.color)
-        self.menu = self.smallfont.render("Main Menu", True, self.color)
-        self.ciphers = self.smallfont.render("Ciphers", True, self.color_dark)
-
-
         # buttons and their locations/functions
-        menu_button = button(self.height - 20, self.menu, lambda: self.SwitchToScene(StartMenu()), x1 = 20)
-        next_button = button(self.height - 20, self.next, lambda: self.SwitchToScene(AboutCi_2()), x1 = self.width - 20 - self.x2)
+        menu_button = button(self.height / 1.1, self.menu, lambda: self.SwitchToScene(StartMenu()), self.width / 2 + 350,
+                             170, 40)
+        other_button = button(self.height / 1.1, self.other, lambda: self.SwitchToScene(Use()),
+                             self.width / 2 - 500, 240, 40)   
 
-        self.buttons = [menu_button, next_button]
-
-    def Input(self, events, pressed_keys, mouse):
-        for ev in events:
-            """
-            if ev.type == pygame.QUIT:
-                pygame.quit()
-            """
-            # checks if a mouse is clicked
-            if ev.type == pygame.MOUSEBUTTONDOWN:
-
-                # if the mouse is clicked on a
-                # button the game does the thing
-                for i in self.buttons:
-                    if i.hover(mouse):
-                        i.click()
-
-    def Render(self, screen, mouse):
-        # fills the screen with a color
-        screen.fill((255, 255, 165))
+        self.buttons = [menu_button, other_button]
 
         for i in self.buttons:
             i.draw(screen)
 
         #Title
-        screen.blit(self.ciphers, (self.width / 2.5, self.height / 3.5))
+        screen.blit(self.title, (self.width / 2 - 200, self.height / 30))
 
         #Information
 
-    def update(self, board, size):
-        return None
+        screen.blit(self.sub1, (75, 120))
+        screen.blit(self.text1, (150, 170))
+        screen.blit(self.text2, (80, 220))
+        screen.blit(self.text3, (80, 270))
 
-
-class AboutCi_2(SceneManager):
-    def __init__(self):
-        SceneManager.__init__(self)
-        print("Information")
-
-        # white color
-        self.color = (255, 255, 255)
-
-        # light shade of the button
-        self.color_light = (170, 170, 170)
-
-        # dark shade of the button
-        self.color_dark = (100, 100, 100)
-
-        # stores the width of the
-        # screen into a variable
-        self.width = 720
-
-        # stores the height of the
-        # screen into a variable
-        self.height = 720
-
-        self.x2 = 75
-
-        self.y2 = 30
-
-        # defining a font
-        self.smallfont = pygame.font.SysFont('Corbel', 35)
-        self.input_smallfont = pygame.font.SysFont('Corbel', 24)
-
-        # rendering a text written in
-        # this font
-        self.back = self.smallfont.render('Back', True, self.color)
-        self.menu = self.smallfont.render("Main Menu", True, self.color)
-        self.title = self.smallfont.render("The Vigenere Cipher", True, self.color_dark)
-        self.next = self.smallfont.render('Next', True, self.color)
-
-
-        # buttons and their locations/functions
-        menu_button = button(self.height - 20, self.menu, lambda: self.SwitchToScene(StartMenu()), x1 = 20)
-        back_button = button(self.height - 20, self.next, lambda: self.SwitchToScene(AboutCi_1()), x1 = self.width - 20 - self.x2)
-
-        self.buttons = [menu_button, back_button]
-
-    def Input(self, events, pressed_keys, mouse):
-        for ev in events:
-            """
-            if ev.type == pygame.QUIT:
-                pygame.quit()
-            """
-            # checks if a mouse is clicked
-            if ev.type == pygame.MOUSEBUTTONDOWN:
-
-                # if the mouse is clicked on a
-                # button the game does the thing
-                for i in self.buttons:
-                    if i.hover(mouse):
-                        i.click()
-
-    def Render(self, screen, mouse):
-        # fills the screen with a color
-        screen.fill((255, 255, 165))
-
-        for i in self.buttons:
-            i.draw(screen)
-
-        #Title
-        screen.blit(self.title, (self.width / 2.5, self.height / 3.5))
-
-        #Information
+        screen.blit(self.sub2, (75, 350))
+        screen.blit(self.txt1, (150, 400))
+        screen.blit(self.txt2, (80, 450))
+        screen.blit(self.txt3, (80, 500))
+        screen.blit(self.txt4, (80, 550))
+        screen.blit(self.txt5, (80, 600))
+        screen.blit(self.txt6, (80, 650))
+        screen.blit(self.txt7, (80, 700))
 
     def update(self, board, size):
-        return None
+        self.width = size[0]
+        self.height = size[1]
