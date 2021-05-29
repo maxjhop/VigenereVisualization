@@ -20,7 +20,8 @@ def main():
 
     # initializing the constructor
     pygame.init()
-    scene = MainMenu()
+    #the starting menu
+    scene = StartMenu()
 
     fpsClock = pygame.time.Clock()
 
