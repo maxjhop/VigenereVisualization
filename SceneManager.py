@@ -2,6 +2,7 @@ import pygame
 from Cipher import Encrypt, Decrypt
 from table import *
 from button_class import button
+from TextHighlight import *
 
 class SceneManager:
     def __init__(self):
@@ -30,9 +31,14 @@ class ButtonScene(SceneManager):
 
         print("BUTTON SCENE INIT")
         self.table = Table()
+        self.displayText = Text_And_Highlight()
         self.result = result
         self.steps = steps
         self.mode = mode
+
+        self.message = message
+        self.key = key
+        self.result = result
 
         print("Result: {}".format(self.result))
 
@@ -56,9 +62,9 @@ class ButtonScene(SceneManager):
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 25)
 
-        self.message = self.smallfont.render(message, True, self.color_dark)
-        self.key = self.smallfont.render(key, True, self.color_dark)
-        self.result = self.smallfont.render(result, True, self.color_dark)
+        #self.message = self.smallfont.render(message, True, self.color_dark)
+        #self.key = self.smallfont.render(key, True, self.color_dark)
+        #self.result = self.smallfont.render(result, True, self.color_dark)
 
         # rendering a text written in this font
         self.menu = self.smallfont.render('Go Back', True, self.color)
@@ -83,9 +89,9 @@ class ButtonScene(SceneManager):
         self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
                         res_button]
 
-        self.messageText = self.smallfont.render(f"message: ", True, self.color_dark)
-        self.keyText = self.smallfont.render(f"key: ", True, self.color_dark)
-        self.resultText = self.smallfont.render(f"result: ", True, self.color_dark)
+        #self.messageText = self.smallfont.render(f"message: ", True, self.color_dark)
+        #self.keyText = self.smallfont.render(f"key: ", True, self.color_dark)
+        #self.resultText = self.smallfont.render(f"result: ", True, self.color_dark)
 
 
         """
@@ -203,15 +209,19 @@ class ButtonScene(SceneManager):
     def Render(self, screen, mouse):
         #screen.fill((255, 255, 165))
         # drawing buttons
+
+        self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper())
+        self.mainDisplay.blit(self.displayText.screen, (0, 500))
+        
         for i in self.buttons:
             i.draw(screen)
 
-        screen.blit(self.messageText, (5, 285))
-        screen.blit(self.message, (5, 305))
-        screen.blit(self.keyText, (5, 345))
-        screen.blit(self.key, (5, 365))
-        screen.blit(self.resultText, (5, 405))
-        screen.blit(self.result, (5, 425))
+        #screen.blit(self.messageText, (5, 285))
+        #screen.blit(self.message, (5, 305))
+        #screen.blit(self.keyText, (5, 345))
+        #screen.blit(self.key, (5, 365))
+        #screen.blit(self.resultText, (5, 405))
+        #screen.blit(self.result, (5, 425))
 
     # This function handles all functionality related to updating the table display for the scene.
     # The argument 'index' refers to an index into the instruction list, so that the correct
@@ -237,6 +247,8 @@ class ButtonScene(SceneManager):
         else: # if current mode is decryption
             # Call table.displayDecrypt
             self.table.displayDecrypt(self.inst[index][1], self.inst[index][0])
+
+        self.displayText.highlight(index, self.mode)
 
         # blit (copy) the table onto the main button scene display at the correct position
         self.mainDisplay.blit(self.table.screen, (x, 10))
