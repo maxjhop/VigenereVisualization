@@ -239,7 +239,7 @@ class ButtonScene(SceneManager):
         # Change table position based on screen size. If main screen size changes, the table will align itself
         # to the very right edge of the screen to make as much room for the buttons and message/keyword/result text
         # as possible. Not sure what happens when screen size is smaller than the table size 
-        x = self.mainBoardSize[0] - 850
+        x = (self.mainBoardSize[0] / 2) - 300
         
         if (self.mode == 0): # if current mode is encryption
             # Call table.displayEncrypt
@@ -259,7 +259,7 @@ class ButtonScene(SceneManager):
     def update(self, board, size):
         self.mainBoardSize = size
         self.mainDisplay = board
-        x = self.mainBoardSize[0] - 850
+        x = (self.mainBoardSize[0] / 2) - 300
         self.mainDisplay.fill((255, 255, 165))
         self.mainDisplay.blit(self.table.screen, (x, 10))
         self.Render(self.mainDisplay, None)
