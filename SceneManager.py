@@ -517,9 +517,7 @@ class InfoMenu(SceneManager):
         # screen into a variable
         self.height = 720
 
-        self.x2 = 75
 
-        self.y2 = 30
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 35)
         self.input_smallfont = pygame.font.SysFont('Corbel', 24)
@@ -528,18 +526,12 @@ class InfoMenu(SceneManager):
         # this font
         self.about = self.smallfont.render('About Ciphers', True, self.color)
         self.use = self.smallfont.render('About This Tool', True, self.color)
-        self.menu = self.smallfont.render("Main Menu", True, self.color)
+        self.menu = self.smallfont.render("Go Back", True, self.color)
         self.information = self.smallfont.render("Information", True, self.color_dark)
 
-        # storing the x1 value so buttons will be center screen
-        midX = self.width - 75/2
 
-        # buttons and their locations/functions
-        menu_button = button(self.height/2 - self.y2*1.5 +5, self.menu, lambda: self.SwitchToScene(StartMenu()), x1 = midX)
-        about_button = button(self.height/2 - self.y2/2, self.about, lambda: self.SwitchToScene(AboutCi_1()), x1 = midX)
-        use_button = button(self.height/2 + self.y2*1.5 +5, self.use, lambda: self.SwitchToScene(Uses_1()), x1 = midX)
 
-        self.buttons = [menu_button, about_button, use_button]
+
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -559,15 +551,28 @@ class InfoMenu(SceneManager):
     def Render(self, screen, mouse):
         # fills the screen with a color
         screen.fill((255, 255, 165))
+        # buttons and their locations/functions
+        about_button = button(self.height / 4.7, self.about, lambda: self.SwitchToScene(AboutCi_1()),
+                              self.width / 2 - 140,
+                              250, 40, 30)
+        use_button = button(self.height / 2.8, self.use, lambda: self.SwitchToScene(Uses_1()), self.width / 2 - 140,
+                            250, 40, 20)
+
+        menu_button = button(self.height / 2, self.menu, lambda: self.SwitchToScene(StartMenu()),
+                             self.width / 2 - 140,
+                             250, 40, 70)
+
+        self.buttons = [menu_button, about_button, use_button]
 
         for i in self.buttons:
             i.draw(screen)
 
         #Menu title
-        screen.blit(self.information, (self.width / 2.5, self.height / 3.5))
+        screen.blit(self.information, (self.width / 2 - 100, self.height / 8))
 
     def update(self, board, size):
-        return None
+        self.width = size[0]
+        self.height = size[1]
 
 class Uses_1(SceneManager):
     def __init__(self):
@@ -601,16 +606,12 @@ class Uses_1(SceneManager):
 
         # rendering a text written in
         # this font
-        self.next = self.smallfont.render('Next (Controls)', True, self.color)
+        self.next = self.smallfont.render('Next', True, self.color)
         self.menu = self.smallfont.render("Main Menu", True, self.color)
         self.title = self.smallfont.render("Using this tool", True, self.color_dark)
 
 
-        # buttons and their locations/functions
-        menu_button = button(self.height - 20, self.menu, lambda: self.SwitchToScene(StartMenu()), x1 = 20)
-        next_button = button(self.height - 20, self.next, lambda: self.SwitchToScene(Uses_2()), x1 = self.width - 20 - self.x2)
 
-        self.buttons = [menu_button, next_button]
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -630,17 +631,25 @@ class Uses_1(SceneManager):
     def Render(self, screen, mouse):
         # fills the screen with a color
         screen.fill((255, 255, 165))
+        # buttons and their locations/functions
+        menu_button = button(self.height / 1.1, self.menu, lambda: self.SwitchToScene(StartMenu()), self.width / 2 + 350,
+                             170, 40)
+        next_button = button(self.height / 1.1, self.next, lambda: self.SwitchToScene(Uses_2()),
+                             self.width / 2 - 500, 80, 40)
+
+        self.buttons = [menu_button, next_button]
 
         for i in self.buttons:
             i.draw(screen)
 
         #Title
-        screen.blit(self.title, (self.width / 2.5, self.height / 3.5))
+        screen.blit(self.title, (self.width / 2 - 100, self.height / 30))
 
         #Information
 
     def update(self, board, size):
-        return None
+        self.width = size[0]
+        self.height = size[1]
 
 class Uses_2(SceneManager):
     def __init__(self):
