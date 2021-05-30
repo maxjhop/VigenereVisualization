@@ -676,7 +676,7 @@ class InfoMenu(SceneManager):
 class Use(SceneManager):
     def __init__(self):
         SceneManager.__init__(self)
-        print("Information")
+        #print("Information")
 
         # white color
         self.color = (255, 255, 255)
@@ -703,6 +703,8 @@ class Use(SceneManager):
         self.smallfont = pygame.font.SysFont('Corbel', 35)
         self.titlefont = pygame.font.SysFont('Corbel', 50, bold = True)
         self.heading = pygame.font.SysFont('Corbel', 35, bold = True)
+        self.controls = pygame.font.SysFont('Corbel', 26, bold = True, italic = True)
+        self.smallerfont = pygame.font.SysFont('Corbel', 30)
         self.input_smallfont = pygame.font.SysFont('Corbel', 24)
 
         # rendering button and title text
@@ -711,17 +713,28 @@ class Use(SceneManager):
         self.title = self.titlefont.render("Using this tool", True, self.color_dark)
 
         # rendering information text
-        self.text1 = self.smallfont.render("This tool is a visualization of the Vigenere cipher, it can encrypt and decrypt short messages when ", True, self.color_dark)
-        self.text2 = self.smallfont.render("given a key. It is meant to be a learning/ teaching tool to better understand how the Vigenere cipher works,", True, self.color_dark)
-        self.text3 = self.smallfont.render("not a robust encryption/decryption software that can break encryptions", True, self.color_dark)
+        self.text1 = self.smallerfont.render("This tool is a visualization of the Vigenere cipher, it can encrypt and decrypt short messages when ", True, self.color_dark)
+        self.text2 = self.smallerfont.render("given a key. It is meant to be a learning/ teaching tool to better understand how the Vigenere cipher works,", True, self.color_dark)
+        self.text3 = self.smallerfont.render("not a robust encryption/decryption software that can break encryptions.", True, self.color_dark)
 
         self.sub1 = self.heading.render("How to use this tool", True, self.color_dark)
-        self.ins1 = self.smallfont.render("1. From the Main Menu, click on 'Visualization Tool'", True, self.color_dark)
-        self.ins2 = self.smallfont.render("2. Input the text you want encrypted or decryped in the 'message' box", True, self.color_dark)
-        self.ins3 = self.smallfont.render("3. Input the key you want or need used to either encrypty or decrypt the text in the 'key' box", True, self.color_dark)
-        self.ins4 = self.smallfont.render("4. Click on either 'encrypt' or 'decrypt' to process the text", True, self.color_dark)
+        self.ins1 = self.smallerfont.render("1. From the Main Menu, click on 'Visualization Tool'", True, self.color_dark)
+        self.ins2 = self.smallerfont.render("2. Input the text you want encrypted or decryped in the 'message' box", True, self.color_dark)
+        self.ins3 = self.smallerfont.render("3. Input the key you want or need used to either encrypty or decrypt the text in the 'key' box", True, self.color_dark)
+        self.ins4 = self.smallerfont.render("4. Click on either 'encrypt' or 'decrypt' to process the text", True, self.color_dark)
 
         self.sub2 = self.heading.render("Controls", True, self.color_dark)
+        self.cont1 = self.controls.render("Playing/ Paused:", True, self.color_dark)
+        self.cont2 = self.controls.render("Step Forward/ Step Back:", True, self.color_dark)
+        self.cont3 = self.controls.render("Speed Up/ Slow Down:", True, self.color_dark)
+        self.cont4 = self.controls.render("Restart:", True, self.color_dark)
+        self.cont5 = self.controls.render("Go Back:", True, self.color_dark)
+
+        self.ctxt1 = self.smallerfont.render("This button toggles playing or pausing the animation", True, self.color_dark)
+        self.ctxt2 = self.smallerfont.render("When paused these buttons will either go forward or backward one step in the animation", True, self.color_dark)
+        self.ctxt3 = self.smallerfont.render("When playing these buttons will either speed up or slow the speed of the animation", True, self.color_dark)
+        self.ctxt4 = self.smallerfont.render("This button will restart the animation in a paused state", True, self.color_dark)
+        self.ctxt5 = self.smallerfont.render("This buttone will take you back to the visualization menu to try a new encryption/ decryption", True, self.color_dark)
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -757,16 +770,27 @@ class Use(SceneManager):
 
         #Information
         screen.blit(self.text1, (self.width / 2 - 625, 120))
-        screen.blit(self.text2, (self.width / 2 - 725, 170))
-        screen.blit(self.text3, (self.width / 2 - 725, 220))
+        screen.blit(self.text2, (self.width / 2 - 725, 160))
+        screen.blit(self.text3, (self.width / 2 - 725, 200))
 
-        screen.blit(self.sub1, (75, 300))
-        screen.blit(self.ins1, (150, 350))
-        screen.blit(self.ins2, (150, 400))
-        screen.blit(self.ins3, (150, 450))
-        screen.blit(self.ins4, (150, 500))
+        screen.blit(self.sub1, (75, 250))
+        screen.blit(self.ins1, (150, 290))
+        screen.blit(self.ins2, (150, 330))
+        screen.blit(self.ins3, (150, 370))
+        screen.blit(self.ins4, (150, 410))
 
-        screen.blit(self.sub2, (75, 580))
+        screen.blit(self.sub2, (75, 460))
+        screen.blit(self.cont1, (150, 500))
+        screen.blit(self.cont2, (150, 540))
+        screen.blit(self.cont3, (150, 580))
+        screen.blit(self.cont4, (150, 620))
+        screen.blit(self.cont5, (150, 660))
+
+        screen.blit(self.ctxt1, (350, 500))
+        screen.blit(self.ctxt2, (460, 540))
+        screen.blit(self.ctxt3, (420, 580))
+        screen.blit(self.ctxt4, (260, 620))
+        screen.blit(self.ctxt5, (265, 660))
 
     def update(self, board, size):
         self.width = size[0]
@@ -776,7 +800,7 @@ class Use(SceneManager):
 class About(SceneManager):
     def __init__(self):
         SceneManager.__init__(self)
-        print("Information")
+        #print("Information")
 
         # white color
         self.color = (255, 255, 255)
@@ -813,9 +837,9 @@ class About(SceneManager):
 
         #rendering information text
         self.sub1 = self.heading.render("What is a cipher?", True, self.color_dark)
-        self.text1 = self.smallfont.render("A cipher is a system in which plain text is encoded via transposition or subsititution according to", True, self.color_dark)
-        self.text2 = self.smallfont.render("predetermined system. Some betterknown examples are the Caesar cipher, Enigma code, Morse code, ", True, self.color_dark)
-        self.text3 = self.smallfont.render("and even smoke signals. This tool is a visualization of the vigenere cipher.", True, self.color_dark)
+        self.text1 = self.smallerfont.render("A cipher is a system in which plain text is encoded via transposition or subsititution according to", True, self.color_dark)
+        self.text2 = self.smallerfont.render("predetermined system. Some betterknown examples are the Caesar cipher, Enigma code, Morse code, ", True, self.color_dark)
+        self.text3 = self.smallerfont.render("and even smoke signals. This tool is a visualization of the vigenere cipher.", True, self.color_dark)
 
         self.sub2 = self.heading.render("The Vigenere Cipher", True, self.color_dark)
         self.txt1 = self.smallerfont.render("First descriped in 1553 it remained unbroken for three centries and gained the title 'le chiffre indechiffrable'", True, self.color_dark)
@@ -824,7 +848,7 @@ class About(SceneManager):
         self.txt4 = self.smallerfont.render("The colums are for the text and rows for the keyword. The first letter of each are highlighted and the resulting", True, self.color_dark)
         self.txt5 = self.smallerfont.render("encrypted letter is found in the grid. While for decryption the key letter row is highlighted and the encrypted", True, self.color_dark)
         self.txt6 = self.smallerfont.render("letter will find the plain text column. Keywords are repeated until they reach the lenght necessary to encrypt", True, self.color_dark)
-        self.txt7 = self.smallerfont.render("the entire message. For example the keyword 'one' would be 'oneoneoneo' for the plain text 'everything'", True, self.color_dark)
+        self.txt7 = self.smallerfont.render("the entire message. For example the keyword 'one' would be 'oneoneoneo' for the plain text 'everything'.", True, self.color_dark)
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -860,19 +884,19 @@ class About(SceneManager):
 
         #Information
 
-        screen.blit(self.sub1, (75, 120))
-        screen.blit(self.text1, (self.width / 2 - 625, 170))
-        screen.blit(self.text2, (self.width / 2 - 725, 220))
-        screen.blit(self.text3, (self.width / 2 - 725, 270))
+        screen.blit(self.sub1, (150, 120))
+        screen.blit(self.text1, (self.width / 2 - 600, 170))
+        screen.blit(self.text2, (self.width / 2 - 650, 220))
+        screen.blit(self.text3, (self.width / 2 - 650, 270))
 
-        screen.blit(self.sub2, (75, 350))
-        screen.blit(self.txt1, (self.width / 2 - 650, 400))
-        screen.blit(self.txt2, (self.width / 2 - 700, 450))
-        screen.blit(self.txt3, (self.width / 2 - 700, 500))
-        screen.blit(self.txt4, (self.width / 2 - 700, 550))
-        screen.blit(self.txt5, (self.width / 2 - 700, 600))
-        screen.blit(self.txt6, (self.width / 2 - 700, 650))
-        screen.blit(self.txt7, (self.width / 2 - 700, 700))
+        screen.blit(self.sub2, (150, 350))
+        screen.blit(self.txt1, (self.width / 2 - 600, 400))
+        screen.blit(self.txt2, (self.width / 2 - 650, 450))
+        screen.blit(self.txt3, (self.width / 2 - 650, 500))
+        screen.blit(self.txt4, (self.width / 2 - 650, 550))
+        screen.blit(self.txt5, (self.width / 2 - 650, 600))
+        screen.blit(self.txt6, (self.width / 2 - 650, 650))
+        screen.blit(self.txt7, (self.width / 2 - 650, 700))
 
     def update(self, board, size):
         self.width = size[0]
