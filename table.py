@@ -16,29 +16,42 @@ for i in range (26):
 # print(letter_grid)
 
 
-
+# table class draws a vigenere table and implements functionality for highlighting specific
+# rows, columns, and cells in the table
 class Table:
     def __init__(self):
+        # self.screen is the surface that holds the table with all current highlights
         self.screen = pg.Surface(screen_size)
 
+        # self.save is a surface that holds the blank table before any highlighting. This is
+        # used in the animation to delete previous highlights in order to make new highlights
         self.save = pg.Surface(screen_size)
 
+        # list of every single rectangular cell in the table
         self.cells = []
+
+        # list of each of the letters in the table and their positions
         self.letters = []
 
+        # list of letters on the edge row and their positions
         self.edgeRowLetters = []
+
+        # list of letters on the edge column and their positions
         self.edgeColLetters = []
-        
-        self.draw_background()
-        self.draw_letters()
-        self.draw_edge_row()
-        self.draw_edge_col()
-        self.save.blit(self.screen, (0, 0))
+
+        # upon initialization, draws the table onto self.screen
+        self.draw_background() # draw the background for the table
+        self.draw_letters() # draw the letters on the table
+        self.draw_edge_row() # draw the edge row letters
+        self.draw_edge_col() # draw the edge column letters
+        self.save.blit(self.screen, (0, 0)) # save blank table to self.save
         return None
 
+    # refresh clears self.screen of any highlights
     def refresh(self):
         self.screen.blit(self.save, (0, 0))
 
+    # draw_background draws the table grid
     def draw_background(self):
         self.screen.fill(pg.Color("white"))
         pg.draw.rect(self.screen, pg.Color("black"), pg.Rect(40,40,780,780),3)
@@ -50,6 +63,7 @@ class Table:
             i += 1
         return None
 
+    # draw_letters draws all of the letters in the table grid
     def draw_letters(self):
         row = 0
         offset = 50
@@ -68,7 +82,8 @@ class Table:
                 col += 1
             row += 1
         return None
-    
+
+    # draw letters along the top row above the grid 
     def draw_edge_row(self):
         edge_row = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         row = 0
@@ -82,6 +97,7 @@ class Table:
             row += 1
         return None
 
+    # draw letters along the column to the left of the grid
     def draw_edge_col(self):
         edge_col = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         col = 0
@@ -95,6 +111,7 @@ class Table:
             col += 1
         return None
 
+    # highlight a specific row in the table
     def highlightRow(self, row):
         offset = row * 26
         tempRect = pg.Rect(self.cells[0].left - 30, self.cells[row*26].top, 27, 27)
@@ -105,6 +122,7 @@ class Table:
             self.screen.blit(self.letters[offset+i][0], self.letters[offset+i][1])
         return None
 
+    # highlight a specific column
     def highlightCol(self, col):
         tempRect = pg.Rect(self.cells[col].left, self.cells[0].top - 30, 27, 27)
         pg.draw.rect(self.screen, (255, 255, 0), tempRect)
@@ -115,18 +133,23 @@ class Table:
             self.screen.blit(self.letters[pos][0], self.letters[pos][1])
         return None
 
+    # Fill a specific cell in the table with a specific color
     def fill_cell(self, row, col, color):
         index = row*26 + col
         pg.draw.rect(self.screen, color, self.cells[index])
         self.screen.blit(self.letters[index][0], self.letters[index][1])
         return None
 
+    # fill a specific letter on the edge row/column
     def fill_edge_cell(self, row, col):
         tempRect = pg.Rect(self.cells[col].left, self.cells[0].top - 30, 27, 27)
         pg.draw.rect(self.screen, (0, 255, 0), tempRect)
         self.screen.blit(self.edgeColLetters[col][0], self.edgeColLetters[col][1])
         return None
 
+    # this function is used to make all of the necessary highlights for a single step in the
+    # encryption process. It highlights the specified row, specified column, and the cell that is
+    # at the intersection between the highlighted row and column
     def displayEncrypt(self, row, column):
         self.screen.blit(self.save, (0, 0))
         self.highlightRow(row)
@@ -134,6 +157,10 @@ class Table:
         self.fill_cell(row, column, (0, 255, 0))
         return None
 
+    # this function is used to make all of the necessary highlights for a single step in the
+    # decryption process. It highlights the specified row, specified column, and the cell that is
+    # at the intersection between the highlighted row and column, and the cell that represents the
+    # location of the decrypted letter
     def displayDecrypt(self, row, column):
         self.screen.blit(self.save, (0, 0))
         self.highlightRow(row)

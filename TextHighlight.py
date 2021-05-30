@@ -15,6 +15,8 @@ font = pg.font.SysFont("FreeSans", 22, bold=True)
 #set title
 pg.display.set_caption('Text')
 
+# Text_And_Highlight class draws the message, keyword, and result to the visualization scene and implements functionality
+# for highlighting specific letters in the message, keyword, and result. 
 class Text_And_Highlight:
     def __init__(self) -> None:
         self.screen = pg.Surface(screen_size)
@@ -26,7 +28,8 @@ class Text_And_Highlight:
 
     def refresh(self):
         self.screen.blit(self.save, (0,0))
-        
+
+    # This function draws the message, key, and result to self.screen in the correct positions
     def write_letter(self, plain_text, key, cipher_text):
         #line_width is the width of the dividing line
         line_width = 3
@@ -89,6 +92,7 @@ class Text_And_Highlight:
             self.screen.blit(n_text, pp)
         pg.draw.line(self.screen, pg.Color("black"), pg.Vector2(xpos,ypos+y_offset), pg.Vector2(k*(letter_distance)+xpos+20,ypos+y_offset),line_width)
 
+    # this function highlights the message, keyword, and result at the specified index
     def highlight(self, ind, mode):
         self.refresh()
 
