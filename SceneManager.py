@@ -210,8 +210,9 @@ class ButtonScene(SceneManager):
         #screen.fill((255, 255, 165))
         # drawing buttons
 
-        self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper())
+
         self.mainDisplay.blit(self.displayText.screen, (0, 500))
+        self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper())
         
         for i in self.buttons:
             i.draw(screen)
@@ -261,8 +262,9 @@ class ButtonScene(SceneManager):
         self.mainDisplay = board
         x = (self.mainBoardSize[0] / 2) - 300
         self.mainDisplay.fill((255, 255, 165))
-        self.mainDisplay.blit(self.table.screen, (x, 10))
+
         self.Render(self.mainDisplay, None)
+        self.mainDisplay.blit(self.table.screen, (x, 10))
         if (not self.paused): # if the game is paused, the board should not update
 
             if (self.timer == 0): # every time the timer == 0, the board updates
