@@ -570,7 +570,7 @@ class StartMenu(SceneManager):
         for ev in events:
             # checks if a mouse is clicked
             if ev.type == pygame.MOUSEBUTTONDOWN:
-
+                # if mouse is clicked while hovering over a button, call the click() function
                 for i in self.buttons:
                     if i.hover(mouse):
                         i.click()
@@ -581,16 +581,17 @@ class StartMenu(SceneManager):
         screen.fill((255, 255, 165))
 
         pygame.draw.rect
-
+        #buttons defined here to update when screen changes size
         menu_button = button(self.height / 4.2, self.menu, lambda: self.SwitchToScene(MainMenu()), self.width / 2 - 140,
                              250, 40)
         info_button = button(self.height / 2.7, self.info, lambda: self.SwitchToScene(InfoMenu()), self.width / 2 - 140,
                              250, 40, 100)
         quit_button = button(self.height / 2, self.quit, lambda: pygame.quit(), self.width / 2 - 140, 250, 40, 100)
         self.buttons = [menu_button, info_button, quit_button]
-
+        #draw all buttons in the scene
         for i in self.buttons:
             i.draw(screen)
+        #render our title and fullscreen suggestion
         screen.blit(self.title, (self.width / 2 - 200, self.height / 8))
         screen.blit(self.important, (self.width / 2 - 225, self.height / 1.5))
 
@@ -599,9 +600,14 @@ class StartMenu(SceneManager):
         self.height = cursize[1]
 
 class InfoMenu(SceneManager):
+    """
+    This is our main information menu, which defines three buttons:
+        1. About ciphers button: When clicked, it will load the scene About(), which displays info about ciphers
+        2. About this tool: When clicked, it will load the scene Use(), which displays how to use the tool
+        3. Go back button: When clicked, it will load the scene StartMenu(), taking you back to the main screen
+    """
     def __init__(self):
         SceneManager.__init__(self)
-        #print("Information")
 
         # white color
         self.color = (255, 255, 255)
@@ -634,10 +640,6 @@ class InfoMenu(SceneManager):
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
-            """
-            if ev.type == pygame.QUIT:
-                pygame.quit()
-            """
             # checks if a mouse is clicked
             if ev.type == pygame.MOUSEBUTTONDOWN:
 
@@ -662,7 +664,7 @@ class InfoMenu(SceneManager):
                              250, 40, 70)
 
         self.buttons = [menu_button, about_button, use_button]
-
+        #draw all defined buttons into the scene
         for i in self.buttons:
             i.draw(screen)
 
@@ -674,6 +676,13 @@ class InfoMenu(SceneManager):
         self.height = size[1]
 
 class Use(SceneManager):
+    """
+    This menu loads when the user selects the "About this tool" button in InfoScene()
+    This scene informs the user on how to use the tool, and what the control buttons do
+    It defines 2 buttons:
+        1. Main Menu: this will load the StartMenu() scene, taking the user back to the main menu
+        2. Cipher information: This will load the About() scene, flipping the user between the two main info scenes
+    """
     def __init__(self):
         SceneManager.__init__(self)
         #print("Information")
@@ -694,11 +703,6 @@ class Use(SceneManager):
         # stores the height of the
         # screen into a variable
         self.height = 720
-
-        self.x2 = 75
-
-        self.y2 = 30
-
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 35)
         self.titlefont = pygame.font.SysFont('Corbel', 50, bold = True)
@@ -734,14 +738,10 @@ class Use(SceneManager):
         self.ctxt2 = self.smallerfont.render("When paused these buttons will either go forward or backward one step in the animation", True, self.color_dark)
         self.ctxt3 = self.smallerfont.render("When playing these buttons will either speed up or slow the speed of the animation", True, self.color_dark)
         self.ctxt4 = self.smallerfont.render("This button will restart the animation in a paused state", True, self.color_dark)
-        self.ctxt5 = self.smallerfont.render("This buttone will take you back to the visualization menu to try a new encryption/ decryption", True, self.color_dark)
+        self.ctxt5 = self.smallerfont.render("This button will take you back to the visualization menu to try a new encryption/ decryption", True, self.color_dark)
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
-            """
-            if ev.type == pygame.QUIT:
-                pygame.quit()
-            """
             # checks if a mouse is clicked
             if ev.type == pygame.MOUSEBUTTONDOWN:
 
@@ -762,6 +762,7 @@ class Use(SceneManager):
 
         self.buttons = [menu_button, other_button]
 
+        #draw all rendered buttons
         for i in self.buttons:
             i.draw(screen)
 
@@ -798,10 +799,16 @@ class Use(SceneManager):
 
 
 class About(SceneManager):
+    """
+    This menu loads when the user selects the "About ciphers" button in InfoScene()
+    This scene informs the user on what ciphers are and how the Vigenere cipher works
+    It defines 2 buttons:
+        1. Main Menu: this will load the StartMenu() scene, taking the user back to the main menu
+        2. Tool information: This will load the Use() scene, flipping the user between the two main info scenes
+    """
     def __init__(self):
-        SceneManager.__init__(self)
-        #print("Information")
 
+        SceneManager.__init__(self)
         # white color
         self.color = (255, 255, 255)
 

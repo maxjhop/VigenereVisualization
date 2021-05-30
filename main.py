@@ -55,6 +55,7 @@ def main():
         active_scene.Render(screen, mouse)
         active_scene.update(screen, cursize)
 
+        # if the scene is switched, this will load a new scene
         active_scene = active_scene.scene
 
         # updates the frames of the game
