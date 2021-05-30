@@ -57,10 +57,19 @@ class ButtonScene(SceneManager):
 
         # white color
         self.color = (255, 255, 255)
+        #dark grey
         self.color_dark = (100, 100, 100)
+        #Green colors for play button
+        self.light_green = (0, 204, 0)
+        self.dark_green =(0, 102, 0)
+
+        #Red colors for paused button
+        self.light_red = (255, 102, 102)
+        self.dark_red = (153, 0, 0)
 
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 25)
+
 
         #self.message = self.smallfont.render(message, True, self.color_dark)
         #self.key = self.smallfont.render(key, True, self.color_dark)
@@ -68,30 +77,16 @@ class ButtonScene(SceneManager):
 
         # rendering a text written in this font
         self.menu = self.smallfont.render('Go Back', True, self.color)
-        self.play = self.smallfont.render('Play', True, self.color)
-        self.pause = self.smallfont.render('Pause', True, self.color)
+        self.play = self.smallfont.render('Playing', True, self.color)
+        self.pause = self.smallfont.render('Paused', True, self.color)
         self.forw = self.smallfont.render('Step Forward', True, self.color)
         self.back = self.smallfont.render('Step Back', True, self.color)
         self.up = self.smallfont.render('Speed Up', True, self.color)
         self.down = self.smallfont.render('Slow Down', True, self.color)
         self.res = self.smallfont.render('Restart', True, self.color)
+        self.PlayPause = self.play
 
-        # buttons and their locations
-        play_button = button(5, self.play, lambda: self.togglePause(False))
-        pause_button = button(40, self.pause, lambda: self.togglePause(True))
-        forw_button = button(75, self.forw, lambda: self.stepForward())
-        back_button = button(110, self.back, lambda: self.stepBack())
-        up_button = button(145, self.up, lambda: self.speedUp())
-        down_button = button(180, self.down, lambda: self.slowDown())
-        res_button = button(215, self.res, lambda: self.restart())
-        menu_button = button(250, self.menu, lambda: self.SwitchToScene(MainMenu()))
 
-        self.buttons = [menu_button, play_button, pause_button, forw_button, back_button, up_button, down_button,
-                        res_button]
-
-        #self.messageText = self.smallfont.render(f"message: ", True, self.color_dark)
-        #self.keyText = self.smallfont.render(f"key: ", True, self.color_dark)
-        #self.resultText = self.smallfont.render(f"result: ", True, self.color_dark)
 
 
         """
@@ -110,6 +105,7 @@ class ButtonScene(SceneManager):
     def updatePace(self):
         self.updateSpeed = (30 // self.pace) * 5
         return None
+
 
     # This function makes the animation play slower. It is called on the 'slow down'
     # button presses by the user
@@ -188,8 +184,13 @@ class ButtonScene(SceneManager):
     # Toggles the value of the self.pause variable. This is called on the
     # 'pause'/'play' button presses by the user. A value of true pauses the visualization,
     # and a value of false resumes/plays the animation. 
-    def togglePause(self, value):
-        self.paused = value
+    def togglePause(self):
+        if self.paused:
+            self.PlayPause = self.play
+            self.paused = False
+        else:
+            self.paused = True
+            self.PlayPause = self.pause
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -208,8 +209,25 @@ class ButtonScene(SceneManager):
 
     def Render(self, screen, mouse):
         #screen.fill((255, 255, 165))
-        # drawing buttons
 
+        # drawing buttons
+        # buttons and their locations
+        if self.paused:
+            play_button = button(40, self.PlayPause, lambda: self.togglePause(), color_light=self.light_red,
+                                 color_dark=self.dark_red)
+        else:
+            play_button = button(40, self.PlayPause, lambda: self.togglePause(), color_light=self.light_green,
+                                 color_dark=self.dark_green)
+        # pause_button = button(40, self.pause, lambda: self.togglePause(True))
+        forw_button = button(75, self.forw, lambda: self.stepForward())
+        back_button = button(110, self.back, lambda: self.stepBack())
+        up_button = button(145, self.up, lambda: self.speedUp())
+        down_button = button(180, self.down, lambda: self.slowDown())
+        res_button = button(215, self.res, lambda: self.restart())
+        menu_button = button(250, self.menu, lambda: self.SwitchToScene(MainMenu()))
+
+        self.buttons = [menu_button, play_button, forw_button, back_button, up_button, down_button,
+                        res_button]
 
         self.mainDisplay.blit(self.displayText.screen, (0, 500))
         self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper())
