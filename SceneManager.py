@@ -295,6 +295,9 @@ class MainMenu(SceneManager):
         # dark shade of the button
         self.color_dark = (100, 100, 100)
 
+        # Dark red for error message
+        self.color_darkred = (55, 0, 0)
+
         # stores the width of the
         # screen into a variable
         self.width = 720
@@ -314,6 +317,10 @@ class MainMenu(SceneManager):
         self.message = self.smallfont.render("message", True, self.color_dark)
         self.key = self.smallfont.render("key", True, self.color_dark)
         self.title = self.smallfont.render("Vigenere Visualization Tool", True, self.color_dark)
+        self.error_message = self.smallfont.render("Error: please input a valid key/message", True, self.color_darkred)
+
+        # Error boolean
+        self.error = False
 
 
 
@@ -349,6 +356,7 @@ class MainMenu(SceneManager):
                     #pygame.quit()
                     result = Encrypt(self.message_text, self.key_text)
                     if (result is None):
+                        self.error = True
                         print("ERROR CANNOT ENCRYPT NOTHING!")
                         return None
                     self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1], 0))
@@ -357,6 +365,7 @@ class MainMenu(SceneManager):
                     #pygame.quit()
                     result = Decrypt(self.message_text, self.key_text)
                     if (result is None):
+                        self.error = True
                         print("ERROR CANNOT DECRYPT NOTHING!")
                         return None
                     self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1], 1))
@@ -438,6 +447,8 @@ class MainMenu(SceneManager):
         screen.blit(self.title, (self.width / 2 - 200, self.height / 8))
         screen.blit(message_input, (self.message_rect.x + 10, self.message_rect.y + 10))
         screen.blit(key_input, (self.key_rect.x + 10, self.key_rect.y + 10))
+        if self.error:
+            screen.blit(self.error_message, (self.width / 2 - 275, self.height / 1.5))
 
     def update(self, board, size):
         self.width = size[0]
@@ -464,6 +475,7 @@ class StartMenu(SceneManager):
         self.height = 800
 
         # defining a font
+        self.importantfont = pygame.font.SysFont('Corbel', 45, bold=True)
         self.smallfont = pygame.font.SysFont('Corbel', 35)
         self.input_smallfont = pygame.font.SysFont('Corbel', 24)
 
@@ -473,6 +485,7 @@ class StartMenu(SceneManager):
         self.menu = self.smallfont.render('Visualization Tool', True, self.color)
         self.info = self.smallfont.render('Info', True, self.color)
         self.quit = self.smallfont.render('Quit', True, self.color)
+        self.important = self.importantfont.render("Best used in fullscreen!", True, self.color_dark)
         self.buttons = []
 
 
@@ -502,6 +515,7 @@ class StartMenu(SceneManager):
         for i in self.buttons:
             i.draw(screen)
         screen.blit(self.title, (self.width / 2 - 200, self.height / 8))
+        screen.blit(self.important, (self.width / 2 - 225, self.height / 1.5))
 
     def update(self, screen, cursize):
         self.width = cursize[0]
