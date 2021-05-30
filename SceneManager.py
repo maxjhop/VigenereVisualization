@@ -665,9 +665,9 @@ class Use(SceneManager):
         screen.blit(self.title, (self.width / 2 - 150, self.height / 30))
 
         #Information
-        screen.blit(self.text1, (150, 120))
-        screen.blit(self.text2, (75, 170))
-        screen.blit(self.text3, (75, 220))
+        screen.blit(self.text1, (self.width / 2 - 625, 120))
+        screen.blit(self.text2, (self.width / 2 - 725, 170))
+        screen.blit(self.text3, (self.width / 2 - 725, 220))
 
         screen.blit(self.sub1, (75, 300))
         screen.blit(self.ins1, (150, 350))
@@ -710,6 +710,7 @@ class About(SceneManager):
 
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 35)
+        self.smallerfont = pygame.font.SysFont('Corbel', 30)
         self.titlefont = pygame.font.SysFont('Corbel', 40, bold = True)
         self.heading = pygame.font.SysFont('Corbel', 35, bold = True)
         self.input_smallfont = pygame.font.SysFont('Corbel', 24)
@@ -722,17 +723,17 @@ class About(SceneManager):
         #rendering information text
         self.sub1 = self.heading.render("What is a cipher?", True, self.color_dark)
         self.text1 = self.smallfont.render("A cipher is a system in which plain text is encoded via transposition or subsititution according to", True, self.color_dark)
-        self.text2 = self.smallfont.render("predetermined system. Some betterknown examples are the Caesar cipher, Enigma code, Morse code, and even", True, self.color_dark)
-        self.text3 = self.smallfont.render("smoke signals. This tool is a visualization of the vigenere cipher.", True, self.color_dark)
+        self.text2 = self.smallfont.render("predetermined system. Some betterknown examples are the Caesar cipher, Enigma code, Morse code, ", True, self.color_dark)
+        self.text3 = self.smallfont.render("and even smoke signals. This tool is a visualization of the vigenere cipher.", True, self.color_dark)
 
         self.sub2 = self.heading.render("The Vigenere Cipher", True, self.color_dark)
-        self.txt1 = self.smallfont.render("First descriped in 1553 it remained unbroken for three centries and gained the title 'le chiffre indechiffrable'", True, self.color_dark)
-        self.txt2 = self.smallfont.render("or 'the indecipherable cipher'. The Vigenere cipher uses two alphabets, one for the text to be altered and", True, self.color_dark)
-        self.txt3 = self.smallfont.render("another for the keyword. These two alphabets form a grid of letters, shifting to the left every row/column. The", True, self.color_dark)
-        self.txt4 = self.smallfont.render("colums are for the text and rows for the keyword. The first letter of each are highlighted and the resulting", True, self.color_dark)
-        self.txt5 = self.smallfont.render("encrypted letter is found in the grid. While for decryption the key letter row is highlighted and the encrypted", True, self.color_dark)
-        self.txt6 = self.smallfont.render("letter will find the plain text column. Keywords are repeated until they reach the lenght necessary to encrypt", True, self.color_dark)
-        self.txt7 = self.smallfont.render("the entire message. For example the keyword 'one' would be 'oneoneoneo' for the plain text 'everything'", True, self.color_dark)
+        self.txt1 = self.smallerfont.render("First descriped in 1553 it remained unbroken for three centries and gained the title 'le chiffre indechiffrable'", True, self.color_dark)
+        self.txt2 = self.smallerfont.render("or 'the indecipherable cipher'. The Vigenere cipher uses two alphabets, one for the text to be altered and", True, self.color_dark)
+        self.txt3 = self.smallerfont.render("another for the keyword. These two alphabets form a grid of letters, shifting to the left every row/column.", True, self.color_dark)
+        self.txt4 = self.smallerfont.render("The colums are for the text and rows for the keyword. The first letter of each are highlighted and the resulting", True, self.color_dark)
+        self.txt5 = self.smallerfont.render("encrypted letter is found in the grid. While for decryption the key letter row is highlighted and the encrypted", True, self.color_dark)
+        self.txt6 = self.smallerfont.render("letter will find the plain text column. Keywords are repeated until they reach the lenght necessary to encrypt", True, self.color_dark)
+        self.txt7 = self.smallerfont.render("the entire message. For example the keyword 'one' would be 'oneoneoneo' for the plain text 'everything'", True, self.color_dark)
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -769,18 +770,18 @@ class About(SceneManager):
         #Information
 
         screen.blit(self.sub1, (75, 120))
-        screen.blit(self.text1, (150, 170))
-        screen.blit(self.text2, (80, 220))
-        screen.blit(self.text3, (80, 270))
+        screen.blit(self.text1, (self.width / 2 - 625, 170))
+        screen.blit(self.text2, (self.width / 2 - 725, 220))
+        screen.blit(self.text3, (self.width / 2 - 725, 270))
 
         screen.blit(self.sub2, (75, 350))
-        screen.blit(self.txt1, (150, 400))
-        screen.blit(self.txt2, (80, 450))
-        screen.blit(self.txt3, (80, 500))
-        screen.blit(self.txt4, (80, 550))
-        screen.blit(self.txt5, (80, 600))
-        screen.blit(self.txt6, (80, 650))
-        screen.blit(self.txt7, (80, 700))
+        screen.blit(self.txt1, (self.width / 2 - 650, 400))
+        screen.blit(self.txt2, (self.width / 2 - 700, 450))
+        screen.blit(self.txt3, (self.width / 2 - 700, 500))
+        screen.blit(self.txt4, (self.width / 2 - 700, 550))
+        screen.blit(self.txt5, (self.width / 2 - 700, 600))
+        screen.blit(self.txt6, (self.width / 2 - 700, 650))
+        screen.blit(self.txt7, (self.width / 2 - 700, 700))
 
     def update(self, board, size):
         self.width = size[0]
