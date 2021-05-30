@@ -5,19 +5,46 @@ from button_class import button
 from TextHighlight import *
 
 class SceneManager:
+    """
+    Base class for all scenes, defines functions that all scenes can use
+    """
     def __init__(self):
         self.scene = self
 
     def Input(self, events, pressed_keys, mouse):
+        """
+        Reads input and updates variables based on input
+        :param events: a list of events that has happened since last frame update
+        :param pressed_keys: the list of pressed keys since the last frame update
+        :param mouse: the position of the mouse
+        :return: none
+        """
         print("Input not overridden")
 
     def Render(self, screen, mouse):
+        """
+        Renders text and shapes onto screen
+        :param screen: the initialized screen
+        :param mouse: the position of the mouse
+        :return: none
+        """
         print("Render not overriden")
 
     def update(self, screen, cursize):
+        """
+        Updates variables each frame, mainly used to reposition items after a resize
+        :param screen: the initialized screen
+        :param cursize: the size of the screen
+        :return: none
+        """
         return None
 
     def SwitchToScene(self, next_scene):
+        """
+        Updates self.scene to load the next scene
+        :param next_scene: the scene that should be displayed after this funciton is called.
+        :return:
+        """
         self.scene = next_scene
 
     def Terminate(self):
@@ -26,7 +53,18 @@ class SceneManager:
 
 
 class ButtonScene(SceneManager):
+    """
+    The scene for the visualization of the algorithm. Includes the table and the controls.
+    """
     def __init__(self, message, key, result, steps, mode):
+        """
+
+        :param message: the message input by the user
+        :param key: the key input by the user
+        :param result: the result of the encryption/decryption process
+        :param steps: a tuple of the steps from the cipher
+        :param mode: can either be encryption=0 or decryption=1
+        """
         SceneManager.__init__(self)
 
         print("BUTTON SCENE INIT")
@@ -71,11 +109,6 @@ class ButtonScene(SceneManager):
         self.smallfont = pygame.font.SysFont('Corbel', 25)
         self.font = pg.font.SysFont("FreeSans", 28, bold=True)
 
-
-        #self.message = self.smallfont.render(message, True, self.color_dark)
-        #self.key = self.smallfont.render(key, True, self.color_dark)
-        #self.result = self.smallfont.render(result, True, self.color_dark)
-
         # rendering a text written in this font
         self.menu = self.smallfont.render('Go Back', True, self.color)
         self.play = self.smallfont.render('Playing', True, self.color)
@@ -88,20 +121,6 @@ class ButtonScene(SceneManager):
         self.encryptText = self.font.render('Encrypting', True, self.color_dark)
         self.decryptText = self.font.render('Decrypting', True, self.color_dark)
         self.PlayPause = self.play
-
-
-
-
-        """
-        while True:
-
-            # stores the (x,y) coordinates into
-            # the variable as a tuple
-            mouse = pygame.mouse.get_pos()
-
-            # fills the screen with a color
-            screen.fill((50, 100, 0))
-        """
 
     # Updates the self.updateSpeed variable so the self.update() function makes update
     # to the board at the appropriate rate
@@ -210,13 +229,13 @@ class ButtonScene(SceneManager):
 
     def Render(self, screen, mouse):
         #screen.fill((255, 255, 165))
-
+        #updates the speed multiplier display
         self.speed = f"Speed: {self.pace}X"
         self.speedText = self.font.render(self.speed, True, self.color_dark)
 
 
-        # drawing buttons
-        # buttons and their locations
+        # defining buttons
+        # and their locations
         if self.paused:
             self.PlayPause = self.pause
             play_button = button(40, self.PlayPause, lambda: self.togglePause(), color_light=self.light_red,
@@ -238,15 +257,18 @@ class ButtonScene(SceneManager):
 
         self.mainDisplay.blit(self.displayText.screen, (0, 500))
         self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper())
-        
+
+        #draw buttons
         for i in self.buttons:
             i.draw(screen)
 
-
+        #if we are encrypting, display encryptText
         if self.mode == 0:
             screen.blit(self.encryptText, (5, 5))
+        #if we are decrypting, display decryptText
         elif self.mode == 1:
             screen.blit(self.decryptText, (5, 5))
+        #display the speed multiplier
         screen.blit(self.speedText, (5, 315))
 
         #screen.blit(self.messageText, (5, 285))
@@ -318,6 +340,9 @@ class ButtonScene(SceneManager):
         return None
 
 class MainMenu(SceneManager):
+    """
+    This is the class for the menu where the user enters their message/key
+    """
     def __init__(self):
         SceneManager.__init__(self)
         # white color
@@ -352,24 +377,25 @@ class MainMenu(SceneManager):
         self.key = self.smallfont.render("key", True, self.color_dark)
         self.title = self.smallfont.render("Vigenere Visualization Tool", True, self.color_dark)
         self.error_message = self.smallfont.render("Error: please input a valid key/message", True, self.color_darkred)
+        self.menu = self.smallfont.render('Back to Main Menu', True, self.color)
+
 
         # Error boolean
         self.error = False
 
-
-
-
-
+        #Defining colors
         self.message_color = self.color
         self.key_color = self.color
+
+        #Booleans for switching between inputs
         self.message_active = False
         self.key_active = False
+
+        #sent to ButtonScene, updates when the user inputs letters
         self.message_text = ''
         self.key_text = ''
 
-        self.menu = self.smallfont.render('Back to Main Menu', True, self.color)
-
-
+        #A list of valid characters that can be input
         self.validCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
                                 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
                                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -379,15 +405,13 @@ class MainMenu(SceneManager):
         for ev in events:
             # checks if a mouse is clicked
             if ev.type == pygame.MOUSEBUTTONDOWN:
-
+                #check all buttons, if the mouse is hovering over it on this event, trigger click()
                 for i in self.buttons:
                     if i.hover(mouse):
                         i.click()
 
-                # if the mouse is clicked on the Encryption
-                # button the game is terminated
+                # if the mouse is clicked on the Encryption button, load button scene if input is valid
                 if self.encrypt_rect.collidepoint(ev.pos):
-                    #pygame.quit()
                     result = Encrypt(self.message_text, self.key_text)
                     if (result is None):
                         self.error = True
@@ -395,8 +419,8 @@ class MainMenu(SceneManager):
                         return None
                     self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1], 0))
 
+                # if the mouse is clicked on the Decryption button, load button scene if input is valid
                 if self.decrypt_rect.collidepoint(ev.pos):
-                    #pygame.quit()
                     result = Decrypt(self.message_text, self.key_text)
                     if (result is None):
                         self.error = True
@@ -404,12 +428,14 @@ class MainMenu(SceneManager):
                         return None
                     self.SwitchToScene(ButtonScene(result[2], result[3], result[0], result[1], 1))
 
+                #the input bar for the message, will deactivate when key input bar is activated
                 if self.message_rect.collidepoint(ev.pos):
                     self.message_active = True
                     self.message_color = self.color_light
                     self.key_color = self.color
                     self.key_active = False
 
+                #the input bar for the key, will deactivate when message input bar is activated
                 if self.key_rect.collidepoint(ev.pos):
                     self.key_active = True
                     self.key_color = self.color_light
@@ -417,18 +443,21 @@ class MainMenu(SceneManager):
                     self.message_active = False
 
             if ev.type == pygame.KEYDOWN:
-
+                #if the user has selected the message bar to type into, display on screen and update message_text
                 if self.message_active:
+                    #delete a character if backspace is pressed
                     if ev.key == pygame.K_BACKSPACE:
                         self.message_text = self.message_text[:-1]
+                    #check if valid input/not too long
                     elif ev.unicode in self.validCharacters and len(self.message_text) <= 19:
                         self.message_text += ev.unicode
 
-
-
+                #if the user has selected the key bar to type into, display on screen and update key_text
                 elif self.key_active:
+                    #delete a character if backspace is pressed
                     if ev.key == pygame.K_BACKSPACE:
                         self.key_text = self.key_text[:-1]
+                    #check if valid input/not too long
                     elif ev.unicode in self.validCharacters and len(self.key_text) <= 19:
                         self.key_text += ev.unicode
 
@@ -437,16 +466,20 @@ class MainMenu(SceneManager):
         screen.fill((255, 255, 165))
 
         pygame.draw.rect
-
+        #define the encrypt button here to update the position if screen size changes
         self.encrypt_rect = pygame.Rect(self.width / 2 + 50, self.height / 1.7, 140, 40)
+        #define the decrypt button here to update the position if screen size changes
         self.decrypt_rect = pygame.Rect(self.width / 2 - 200, self.height / 1.7, 140, 40)
+        #define the message input rect here to update the position if screen size changes
         self.message_rect = pygame.Rect(self.width / 2 - 150, self.height / 4.2, 300, 40)
+        # define the key input rect here to update the position if screen size changes
         self.key_rect = pygame.Rect(self.width / 2 - 150, self.height / 2.5, 300, 40)
+        #The menu button to return to the main menu is defined hre to update position
         menu_button = button(self.height / 1.3, self.menu, lambda: self.SwitchToScene(StartMenu()), self.width / 2 - 140,
                              280, 40)
-
+        #the list of buttons in our scene
         self.buttons = [menu_button]
-
+        #draw all buttons in the scene
         for i in self.buttons:
             i.draw(screen)
 
@@ -466,29 +499,39 @@ class MainMenu(SceneManager):
         else:
             pygame.draw.rect(screen, self.color_dark, self.decrypt_rect)
 
+        #the user's input is being defined as a font so that it can be displayed to the screen
         message_input = self.input_smallfont.render(self.message_text, True, self.color_dark)
         key_input = self.input_smallfont.render(self.key_text, True, self.color_dark)
 
+        #Draw the input rectangles that we defined earlier
         pygame.draw.rect(screen, self.message_color, self.message_rect)
         pygame.draw.rect(screen, self.key_color, self.key_rect)
 
         # superimposing text onto our buttons
         screen.blit(self.encrypt, (self.encrypt_rect.x + 10, self.encrypt_rect.y))
         screen.blit(self.decrypt, (self.decrypt_rect.x + 10, self.decrypt_rect.y))
-
         screen.blit(self.message, (self.width / 2 - 60, self.height / 3.5))
         screen.blit(self.key, (self.width / 2 - 30, self.height / 2.2))
         screen.blit(self.title, (self.width / 2 - 200, self.height / 8))
         screen.blit(message_input, (self.message_rect.x + 10, self.message_rect.y + 10))
         screen.blit(key_input, (self.key_rect.x + 10, self.key_rect.y + 10))
+        #if there is invalid input, display an error message
         if self.error:
             screen.blit(self.error_message, (self.width / 2 - 275, self.height / 1.5))
 
+    # This function is used to update the screen size to reposition objects in our scene
     def update(self, board, size):
         self.width = size[0]
         self.height = size[1]
 
 class StartMenu(SceneManager):
+    """
+    The first menu that is displayed when the program starts.
+    Defines 3 buttons:
+        1. Visualization button: loads MainMenu() for the user to use the visualization tool
+        2. Info button: loads InfoMenu() for the user to learn about the system
+        3. Quit: quits the program
+    """
     def __init__(self):
         SceneManager.__init__(self)
         # white color
