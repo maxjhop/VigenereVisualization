@@ -60,7 +60,6 @@ class StartMenu(SceneManager):
                     if i.hover(mouse):
                         i.click()
 
-
     def Render(self, screen, mouse):
         # fills the screen with a color
         screen.fill((255, 255, 165))
