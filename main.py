@@ -45,6 +45,7 @@ def main():
 
             if ev.type == pygame.VIDEORESIZE:
                 cursize = ev.size
+                print(cursize)
 
         # stores the (x,y) coordinates into
         # the variable as a tuple
