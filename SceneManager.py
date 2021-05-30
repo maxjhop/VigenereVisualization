@@ -69,6 +69,7 @@ class ButtonScene(SceneManager):
 
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 25)
+        self.font = pg.font.SysFont("FreeSans", 28, bold=True)
 
 
         #self.message = self.smallfont.render(message, True, self.color_dark)
@@ -84,6 +85,8 @@ class ButtonScene(SceneManager):
         self.up = self.smallfont.render('Speed Up', True, self.color)
         self.down = self.smallfont.render('Slow Down', True, self.color)
         self.res = self.smallfont.render('Restart', True, self.color)
+        self.encryptText = self.font.render('Encrypting', True, self.color_dark)
+        self.decryptText = self.font.render('Decrypting', True, self.color_dark)
         self.PlayPause = self.play
 
 
@@ -186,11 +189,9 @@ class ButtonScene(SceneManager):
     # and a value of false resumes/plays the animation. 
     def togglePause(self):
         if self.paused:
-            self.PlayPause = self.play
             self.paused = False
         else:
             self.paused = True
-            self.PlayPause = self.pause
 
     def Input(self, events, pressed_keys, mouse):
         for ev in events:
@@ -210,21 +211,27 @@ class ButtonScene(SceneManager):
     def Render(self, screen, mouse):
         #screen.fill((255, 255, 165))
 
+        self.speed = f"Speed: {self.pace}X"
+        self.speedText = self.font.render(self.speed, True, self.color_dark)
+
+
         # drawing buttons
         # buttons and their locations
         if self.paused:
+            self.PlayPause = self.pause
             play_button = button(40, self.PlayPause, lambda: self.togglePause(), color_light=self.light_red,
                                  color_dark=self.dark_red)
         else:
+            self.PlayPause = self.play
             play_button = button(40, self.PlayPause, lambda: self.togglePause(), color_light=self.light_green,
                                  color_dark=self.dark_green)
-        # pause_button = button(40, self.pause, lambda: self.togglePause(True))
-        forw_button = button(75, self.forw, lambda: self.stepForward())
-        back_button = button(110, self.back, lambda: self.stepBack())
-        up_button = button(145, self.up, lambda: self.speedUp())
-        down_button = button(180, self.down, lambda: self.slowDown())
-        res_button = button(215, self.res, lambda: self.restart())
-        menu_button = button(250, self.menu, lambda: self.SwitchToScene(MainMenu()))
+
+        forw_button = button(85, self.forw, lambda: self.stepForward())
+        back_button = button(120, self.back, lambda: self.stepBack())
+        up_button = button(165, self.up, lambda: self.speedUp())
+        down_button = button(200, self.down, lambda: self.slowDown())
+        res_button = button(245, self.res, lambda: self.restart())
+        menu_button = button(280, self.menu, lambda: self.SwitchToScene(MainMenu()))
 
         self.buttons = [menu_button, play_button, forw_button, back_button, up_button, down_button,
                         res_button]
@@ -234,6 +241,13 @@ class ButtonScene(SceneManager):
         
         for i in self.buttons:
             i.draw(screen)
+
+
+        if self.mode == 0:
+            screen.blit(self.encryptText, (5, 5))
+        elif self.mode == 1:
+            screen.blit(self.decryptText, (5, 5))
+        screen.blit(self.speedText, (5, 315))
 
         #screen.blit(self.messageText, (5, 285))
         #screen.blit(self.message, (5, 305))
