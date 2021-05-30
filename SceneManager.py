@@ -4,6 +4,11 @@ from table import *
 from button_class import button
 from TextHighlight import *
 
+"""
+This is where scenes are defined for the Visualization tool
+Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge 
+"""
+
 class SceneManager:
     """
     Base class for all scenes, defines functions that all scenes can use

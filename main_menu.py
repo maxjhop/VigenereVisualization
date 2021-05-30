@@ -1,13 +1,6 @@
 """
-This is the main project file for the Vigenere Cipher Visualization
-Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
-
-Citations:
-Starter code for basic pygame window was pulled from:
-https://www.geeksforgeeks.org/creating-start-menu-in-pygame/
-
-Inspiration for class setup/scene managers:
-https://nerdparadise.com/programming/pygame/part7
+This is the initial class for the StartMenu
+Authors: Max Hopkins
 """
 import pygame
 import sys

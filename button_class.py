@@ -1,5 +1,8 @@
 import pygame
-
+"""
+This file defines the button() class, which is used to render buttons, the text on the buttons,
+and define their functionality.
+"""
 class button():
 
     def __init__(self, y1, text, click_funct, x1=5, x2=150, y2=30, textOffsetx = 5, textOffsety = 5,
