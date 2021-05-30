@@ -69,6 +69,7 @@ class ButtonScene(SceneManager):
 
         # defining a font
         self.smallfont = pygame.font.SysFont('Corbel', 25)
+        self.font = pg.font.SysFont("FreeSans", 28, bold=True)
 
 
         #self.message = self.smallfont.render(message, True, self.color_dark)
@@ -84,6 +85,8 @@ class ButtonScene(SceneManager):
         self.up = self.smallfont.render('Speed Up', True, self.color)
         self.down = self.smallfont.render('Slow Down', True, self.color)
         self.res = self.smallfont.render('Restart', True, self.color)
+        self.encryptText = self.font.render('Encrypting', True, self.color_dark)
+        self.decryptText = self.font.render('Decrypting', True, self.color_dark)
         self.PlayPause = self.play
 
 
@@ -218,7 +221,7 @@ class ButtonScene(SceneManager):
         else:
             play_button = button(40, self.PlayPause, lambda: self.togglePause(), color_light=self.light_green,
                                  color_dark=self.dark_green)
-        # pause_button = button(40, self.pause, lambda: self.togglePause(True))
+
         forw_button = button(75, self.forw, lambda: self.stepForward())
         back_button = button(110, self.back, lambda: self.stepBack())
         up_button = button(145, self.up, lambda: self.speedUp())
@@ -234,6 +237,12 @@ class ButtonScene(SceneManager):
         
         for i in self.buttons:
             i.draw(screen)
+
+
+        if self.mode == 0:
+            screen.blit(self.encryptText, (5, 5))
+        elif self.mode == 1:
+            screen.blit(self.decryptText, (5, 5))
 
         #screen.blit(self.messageText, (5, 285))
         #screen.blit(self.message, (5, 305))
