@@ -11,7 +11,7 @@ screen_size = 600, 300
 #display screen
 screen = pg.display.set_mode(screen_size)
 #set font size later on
-font = pg.font.SysFont(None, 40)
+font = pg.font.SysFont("FreeSans", 22, bold=True)
 #set title
 pg.display.set_caption('Text')
 

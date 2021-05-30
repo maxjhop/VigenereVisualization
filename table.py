@@ -4,7 +4,7 @@ from pygame.draw import line
 pg.init()
 screen_size = 850, 850
 screen = pg.display.set_mode(screen_size)
-font = pg.font.SysFont(None, 30)
+font = pg.font.SysFont('FreeSans', 19, bold=True)
 pg.display.set_caption('Table')
 letters = ['Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y']
 # letter_grid = [letters.append(letters.pop(0)) for i in range(26)]
