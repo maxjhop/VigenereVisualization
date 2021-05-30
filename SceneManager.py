@@ -213,6 +213,10 @@ class ButtonScene(SceneManager):
     def Render(self, screen, mouse):
         #screen.fill((255, 255, 165))
 
+        self.speed = f"Speed: {self.pace}X"
+        self.speedText = self.font.render(self.speed, True, self.color_dark)
+
+
         # drawing buttons
         # buttons and their locations
         if self.paused:
@@ -243,6 +247,7 @@ class ButtonScene(SceneManager):
             screen.blit(self.encryptText, (5, 5))
         elif self.mode == 1:
             screen.blit(self.decryptText, (5, 5))
+        screen.blit(self.speedText, (5, 285))
 
         #screen.blit(self.messageText, (5, 285))
         #screen.blit(self.message, (5, 305))
