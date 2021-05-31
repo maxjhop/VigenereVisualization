@@ -1,13 +1,24 @@
 # Vigenere Visualization Tool
-Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
+####Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
 
-1.This system is designed to allow teachers/professors to pedagogically
+1. This system is designed to allow teachers/professors to pedagogically
 visualize the steps and results of encrypting and decrypting using the
 Vigenere cipher. Some strategies that we used to increase the effectiveness of 
 this system as a teaching tool:  
-    - `Controlling the pace at which the visualization runs`  
-    - `Being able to start, stop, and step through the visualization`  
-    - `Allowing users to provide input to the algorithm`  
-    - `Rewind capabilites`  
-    - `Hypertext explanations of the display in the form of colored rectangles
-      over the letters of interest.`
+    - Controlling the pace at which the visualization runs
+    - Being able to start, stop, and step through the visualization
+    - Allowing users to provide input to the algorithm
+    - Rewind capabilites
+    - Hypertext explanations of the display in the form of colored rectangles
+      over the letters of interest
+  
+2. The implementation for this system started on and 5/18/21 finished on 5/30/21.
+
+3. This system was created as the final submission for Project 2 in CIS 422, Spring 2021, with Professor Anthony Hornof.
+
+4. To run the system, simply navigate to the `executable` folder and run `VigenereVisualization.exe`. This 
+will start the program.
+   
+5. This project was programmed in Python 3.9.5 using pygame 2.0.1
+
+6. 
