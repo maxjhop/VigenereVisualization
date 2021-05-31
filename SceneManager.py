@@ -3,6 +3,7 @@ from Cipher import Encrypt, Decrypt
 from table import *
 from button_class import button
 from TextHighlight import *
+from main import FPS
 
 """
 This is where scenes are defined for the Visualization tool
@@ -72,30 +73,69 @@ class ButtonScene(SceneManager):
         """
         SceneManager.__init__(self)
 
-        print("BUTTON SCENE INIT")
+        # self.table holds an instance of the Table class from the table module. This variable is responsible for drawing
+        # and updating the vigenere table that is shown when encrypting/decrytping. It is used specifically
+        # in self.update() and self.displayBoard()
         self.table = Table()
+
+        # self.displayText is an instance of the Text_And_Highlight class from the TextHighlight module. This variable
+        # is responsible for displaying and updating the message/keyword/result text when encrypting/decrypting. It is used
+        # in self.displayBoard() and self.Render()
         self.displayText = Text_And_Highlight()
+
+        # self.result is a string that holds the correctly encrypted/decrypted text from the cipher module. 
         self.result = result
+
+        # self.steps is a list of the form [(r1, c1), (r2, c2), ...], which represent the indices into the rows and columns
+        # of the vigenere table. The steps are used by the self.table in order to highlight the correct row and column for
+        # each step in the visualization
         self.steps = steps
+
+        # self.mode is an integer value representing the current mode of operation. It can either be 0 for encryption or
+        # 1 for decryption. It is used in self.displayBoard() in order to make the correct highlight function calls for
+        # self.table and self.displayText
         self.mode = mode
 
+        # self.message is a string that holds the message that the user entered for encryption/decryption. This variable is used
+        # by self.displayText to display the message to the screen while encrypting/decrypting
         self.message = message
+
+        # self.key is a string that holds the keyword that the user entered for encryption/decryption. This variable is used
+        # by self.displayText to display the keyword to the screen while encrypting/decrypting
         self.key = key
-        self.result = result
 
-        print("Result: {}".format(self.result))
-
+        # self.pace is a variable that holds the current pace that the user sets. It has a minimum value of 1 and a maximum
+        # value of 10. The default value always starts at 5. 
         self.pace = 5
-        self.updateSpeed = (30 / self.pace) * 5
 
+        # self.updateSpeed is a variable that represents how many times the visualization updates itself per second when in
+        # play mode. Its value is based on the current pace set by the user, and is used in self.update() to determine when
+        # the next step in the visualization will be displayed. FPS is declared in the main module and basically represents
+        # the number of times that pygame draws the screen for every second. The default update speed will be the same as the
+        # FPS, meaning that the visualization will update once per second. This value is updated on the "speed up" and "slow down"
+        # button presses by the user
+        self.updateSpeed = (FPS // self.pace) * 5
+
+        # self.paused keeps track of the current state of the visualization. A value of false means the visualization is playing, while
+        # a value of true means the visualization is paused. This value is used in self.update() and is updated by the "paused"/"play"
+        # button presses
         self.paused = False # Used to pause the game
 
-        self.mainSurfaceSize = (0, 0) # Hold the size of the main Surface. Updated in self.update
-        self.mainDisplay = pygame.Surface((1, 1)) # Holds the actual main display. Random initial value will be overwritten by self.update
+        # self.mainSurfaceSize is a variable that holds the current size of the actual display surface in main. It is used to handle
+        # functionality for when the user resizes the window of the application. This value is updated in self.update()
+        self.mainSurfaceSize = (0, 0)
 
-        self.inst = steps
+        # self.mainDislay holds a reference to the actual display surface in main. This variable is used to copy all of the local display
+        # changes (drawing buttons, vigenere table, display text, highlights, etc) over the actual display surface that is seen by the user.
+        # This variable is initialized with a random surface and is immediately overwritten on the first call to self.update()
+        self.mainDisplay = pygame.Surface((1, 1))
+
+        # self.ind is an integer that holds the index of the next step to be displayed in self.steps. It is used mainly in
+        # self.displayBoard() to display the next step in the visualization. 
         self.ind = 0
-        
+
+        # self.timer is a varaible that is used in self.update() to determine when the next update will happen. The timer is incremented
+        # once per frame (once every time self.update is called in the main game loop in the main module)
         self.timer = 0
 
         # white color
@@ -130,7 +170,7 @@ class ButtonScene(SceneManager):
     # Updates the self.updateSpeed variable so the self.update() function makes update
     # to the board at the appropriate rate
     def updatePace(self):
-        self.updateSpeed = (30 // self.pace) * 5
+        self.updateSpeed = (FPS // self.pace) * 5
         return None
 
 
@@ -168,13 +208,13 @@ class ButtonScene(SceneManager):
 
             # since self.ind generally points to the next step to be shown, the index needs to be
             # decremented by 2 in order to get the previous step. 
-            self.ind = (self.ind - 2) % len(self.inst)
+            self.ind = (self.ind - 2) % len(self.steps)
 
             # display the previous step in the animation
             self.displayBoard(self.ind)
 
             # increment the index in order to point to the next step to be played
-            self.ind = (self.ind + 1) % len(self.inst)
+            self.ind = (self.ind + 1) % len(self.steps)
         return None
 
     # This function displays the next sequential step in the animation. It can only
@@ -185,7 +225,7 @@ class ButtonScene(SceneManager):
 
             self.displayBoard(self.ind) # display the next step in the animation
             
-            self.ind = (self.ind + 1) % len(self.inst) # increment the index
+            self.ind = (self.ind + 1) % len(self.steps) # increment the index
         return None
 
     # This function stops the current animation process and starts it over from the
@@ -201,7 +241,7 @@ class ButtonScene(SceneManager):
         self.displayBoard(0)
 
         # Reset the current instruction index
-        self.ind = 0
+        self.ind = 1
 
         # Could possibly have something like "self.paused = False" if we want the animation
         # to start playing automatically after it has been reset. For now the animation stays paused
@@ -261,7 +301,7 @@ class ButtonScene(SceneManager):
                         res_button]
 
         self.mainDisplay.blit(self.displayText.screen, (0, 500))
-        self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper())
+        self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper(), self.mode)
 
         #draw buttons
         for i in self.buttons:
@@ -303,11 +343,12 @@ class ButtonScene(SceneManager):
         
         if (self.mode == 0): # if current mode is encryption
             # Call table.displayEncrypt
-            self.table.displayEncrypt(self.inst[index][1], self.inst[index][0])
+            self.table.displayEncrypt(self.steps[index][1], self.steps[index][0])
         else: # if current mode is decryption
             # Call table.displayDecrypt
-            self.table.displayDecrypt(self.inst[index][1], self.inst[index][0])
+            self.table.displayDecrypt(self.steps[index][1], self.steps[index][0])
 
+        #Highlight the correct letters in the display text
         self.displayText.highlight(index, self.mode)
 
         # blit (copy) the table onto the main button scene display at the correct position
@@ -317,13 +358,14 @@ class ButtonScene(SceneManager):
     # This function is called once per game loop in the main.py file. It adds functionality
     # for updating the screen at a certain pace
     def update(self, board, size):
-        self.mainBoardSize = size
-        self.mainDisplay = board
-        x = (self.mainBoardSize[0] / 2) - 300
-        self.mainDisplay.fill((255, 255, 165))
+        self.mainBoardSize = size # update the board size variable to match the actual screen size
+        self.mainDisplay = board # update the main display surface variable
+        x = (self.mainBoardSize[0] / 2) - 300 # Find new position for table based on screen size
+        self.mainDisplay.fill((255, 255, 165)) # fill background with yellow color
 
-        self.Render(self.mainDisplay, None)
-        self.mainDisplay.blit(self.table.screen, (x, 10))
+        self.Render(self.mainDisplay, None) # Render all of the buttons and the display Text
+        self.mainDisplay.blit(self.table.screen, (x, 10)) # draw the table to the screen
+        
         if (not self.paused): # if the game is paused, the board should not update
 
             if (self.timer == 0): # every time the timer == 0, the board updates
@@ -334,10 +376,7 @@ class ButtonScene(SceneManager):
 
                 # Increment the instruction index. Modulo for wrap around, so the animation
                 # plays on repeat
-                self.ind = (self.ind + 1) % len(self.inst)
-
-                # We could possibly include a feature that pauses the animation when we have reached the end,
-                # so that it is clear that the end of the process has been reached
+                self.ind = (self.ind + 1) % len(self.steps)
                 
             # Increment the timer using modulo, so whenever (timer + 1) == updateSpeed,
             # the result of modulo division will be 0, and the board will update

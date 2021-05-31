@@ -36,6 +36,7 @@ def Encrypt(plainText, Keyword):
     # This variable represents the current index into the keyword string
     keywordIndex = 0
 
+    # list of indices in the alphabet that were used in the encryption process
     inst = []
     
     # 'length' is the length of the keyword. Since the plaintext is most likely going to be longer than
@@ -58,6 +59,7 @@ def Encrypt(plainText, Keyword):
             ind2 = alpha2index[keyword[keywordIndex]]
             encryptLetterIndex = (alpha2index[letter.lower()] + alpha2index[keyword[keywordIndex]]) % 26
 
+            # append the current indices for the plaintext letter, keyword letter, and encrypted letter
             inst.append((ind1, ind2, encryptLetterIndex))
 
             # This uses the previously calculated index to find the encrypted letter in the alphabet
@@ -100,6 +102,7 @@ def Decrypt(cipherText, Keyword):
     # via remainder (modulo) division.
     keywordLength = len(keyword)
 
+    # list of indices in the alphabet that were used in the decyrption process
     inst = []
     
     # retStr is a string that will contain the decrypted text after the decryption process has finished
@@ -117,6 +120,7 @@ def Decrypt(cipherText, Keyword):
             ind2 = alpha2index[keyword[keywordIndex]]
             decryptLetterIndex = (alpha2index[letter.lower()] - alpha2index[keyword[keywordIndex]]) % 26
 
+            # append the current indices for the decrypted letter, keyword index, and encrypted letter
             inst.append((decryptLetterIndex, ind2, decryptLetterIndex))
             
             # This uses the previously calculated index to find the encrypted letter in the alphabet
