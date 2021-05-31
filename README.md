@@ -1,5 +1,5 @@
 # Vigenere Visualization Tool
-###Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
+#### Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
 
 1. This system is designed to allow teachers/professors to pedagogically
 visualize the steps and results of encrypting and decrypting using the
