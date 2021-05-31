@@ -1,3 +1,7 @@
+"""
+This file provides functionality for encrypting and decrypting using the Vigenere Cipher.
+"""
+
 """ Dictionary with indices as keys and letters of the alphabet as values. This will be used by the encryption function
     in order to find the encrypted letter by its index. For example, if the encryption function determines that the encrypted
     letter is at index 22, then index2alpha[22] will return 'w'

@@ -1,5 +1,5 @@
 """
-This is the main project file for the Vigenere Cipher Visualization
+This is the main project file for the Vigenere Cipher Visualization and defines the main game loop
 Authors: Joshua Fawcett, Max Hopkins, Meghan Riehl, Yuyao Zhuge
 
 Citations:

@@ -1,6 +1,8 @@
 import sys, pygame as pg
 from pygame.draw import line
-
+"""
+This file defines the table that is displayed for the Visualization
+"""
 pg.init()
 screen_size = 850, 850
 screen = pg.display.set_mode(screen_size)

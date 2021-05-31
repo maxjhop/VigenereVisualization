@@ -3,7 +3,11 @@ from pygame import *
 from pygame import key
 import time
 from Cipher import *
-from pygame.draw import line 
+from pygame.draw import line
+"""
+This file defines the hypertext highlighting for the visualizations by highlighting the letters in the
+message, key, and result strings
+"""
 
 pg.init()
 #set total screen size
