@@ -8,7 +8,7 @@ this system as a teaching tool:
     - Controlling the pace at which the visualization runs
     - Being able to start, stop, and step through the visualization
     - Allowing users to provide input to the algorithm
-    - Rewind capabilites
+    - Rewind capabilities
     - Hypertext explanations of the display in the form of colored rectangles
       over the letters of interest
   
