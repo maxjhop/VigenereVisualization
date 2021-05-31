@@ -22,10 +22,16 @@ alpha2index = {"a":0, "b":1, "c":2, "d":3, "e":4, "f":5, "g":6, "h":7, "i":8, "j
 
 def Encrypt(plainText, Keyword):
     keyword = Keyword.replace(" ", "").lower() # Remove any spaces and uppercase letters from the keyword
+    plainText = plainText.replace(" ", "").lower()  # Remove any spaces and uppercase letters from the plainText
 
     # Error Handling. Make sure the keyword is not an empty string
     if (len(keyword) == 0):
         print("ERROR! Keyword cannot be null")
+        return None
+
+    # Error Handling. Make sure the plainText is not an empty string
+    if (len(plainText) == 0):
+        print("ERROR! plainText cannot be null")
         return None
     
     # Error Handling. Check to make sure the keyword only has letters
@@ -83,13 +89,18 @@ def Encrypt(plainText, Keyword):
 # ==================================================================== Decryption Function ==========================================================================
 
 def Decrypt(cipherText, Keyword):
-    keyword = Keyword.replace(" ", "").lower() # Remove any spaces and uppercase letters from the keyword
-    
+    keyword = Keyword.replace(" ", "").lower()  # Remove any spaces and uppercase letters from the keyword
+    cipherText = cipherText.replace(" ", "").lower()  # Remove any spaces and uppercase letters from the plainText
+
     # Error Handling. Make sure the keyword is not an empty string
     if (len(keyword) == 0):
         print("ERROR! Keyword cannot be null")
         return None
 
+    # Error Handling. Make sure the plainText is not an empty string
+    if (len(cipherText) == 0):
+        print("ERROR! cipherText cannot be null")
+        return None
     # Error Handling. Check to make sure the keyword only has letters
     if (not keyword.isalpha()):
         print("ERROR! Keyword <{}> must only contain letters".format(keyword))
