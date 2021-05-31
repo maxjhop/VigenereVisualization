@@ -21,4 +21,9 @@ will start the program.
    
 5. This project was programmed in Python 3.9.5 using pygame 2.0.1
 
-6. 
+6. The directory structure:
+   - The `executable` directory houses the executable that will run this system
+   - The `Main_Program` directory houses all of the files that were compiled into the executable.
+   - The `Development_Files` directory houses all files that were used to help develop the system.
+   These files are not necessary for the system to run, but were implemented into the system in some 
+     way. These file may not be up to date, as they were not updated after being integrated. 
