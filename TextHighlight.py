@@ -30,7 +30,7 @@ class Text_And_Highlight:
         self.screen.blit(self.save, (0,0))
 
     # This function draws the message, key, and result to self.screen in the correct positions
-    def write_letter(self, plain_text, key, cipher_text):
+    def write_letter(self, plain_text, key, cipher_text, mode):
         #line_width is the width of the dividing line
         line_width = 3
         #the initial x-axis starting point
@@ -41,9 +41,12 @@ class Text_And_Highlight:
         y_offset = 24
         # the distance between each letter
         letter_distance = 21
-        string1 = "Plaintext:"
+        if (mode == 0):
+            string1 = "Plaintext:"
+        else:
+            string1 = "Ciphertext:"
         string2 = "Key:"
-        string3 = "Ciphertext:"
+        string3 = "Result:"
 
         #First row
         #the initial y-axis starting point

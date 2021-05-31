@@ -301,7 +301,7 @@ class ButtonScene(SceneManager):
                         res_button]
 
         self.mainDisplay.blit(self.displayText.screen, (0, 500))
-        self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper())
+        self.displayText.write_letter(self.message.upper(), self.key.upper(), self.result.upper(), self.mode)
 
         #draw buttons
         for i in self.buttons:
