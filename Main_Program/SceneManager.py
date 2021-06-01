@@ -780,7 +780,7 @@ class Use(SceneManager):
 
         self.ctxt1 = self.smallerfont.render("This button toggles playing or pausing the animation", True, self.color_dark)
         self.ctxt2 = self.smallerfont.render("When paused these buttons will either go forward or backward one step in the animation", True, self.color_dark)
-        self.ctxt3 = self.smallerfont.render("When playing these buttons will either speed up or slow the speed of the animation", True, self.color_dark)
+        self.ctxt3 = self.smallerfont.render("These buttons will either speed up or slow the speed of the animation", True, self.color_dark)
         self.ctxt4 = self.smallerfont.render("This button will restart the animation in a paused state", True, self.color_dark)
         self.ctxt5 = self.smallerfont.render("This button will take you back to the visualization menu to try a new encryption/ decryption", True, self.color_dark)
 
