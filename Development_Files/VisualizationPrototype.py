@@ -231,8 +231,8 @@ def main():
 
     #Encrypt or decrypt here. retVal hold all the information returned from the encryption/decryption process
 
-    #retVal = Encrypt("Hello World", "BACON") # comment this out when decrypting
-    retVal = Decrypt("Ienzb Xotzq", "BACON") # comment this out when encrypting
+    retVal = Encrypt("Hello World", "BACON") # comment this out when decrypting
+    #retVal = Decrypt("Ienzb Xotzq", "BACON") # comment this out when encrypting
 
     # list of indices return from encrypt/decrypt. The instructions are used to highlight rows and columns on the board
     instructions = retVal[1]
@@ -244,20 +244,20 @@ def main():
     b = Vis(DISPLAYSURF.convert_alpha())
 
     #""" This code is for visualizing encryption. Comment this out when decrypting
-    #c = pacing(2, b, FPS, instructions, d, 0)
-    #d.write(retVal[2], 0)
-    #d.write(retVal[3], 1)
-    #d.write(retVal[0], 2)
+    c = pacing(2, b, FPS, instructions, d, 0)
+    d.write(retVal[2], 0)
+    d.write(retVal[3], 1)
+    d.write(retVal[0], 2)
     #"""
 
-    #This code is for visualizing decryption. Comment this out when encrypting
+    """ This code is for visualizing decryption. Comment this out when encrypting
     c = pacing(2, b, FPS, instructions, d, 1) # create pacing object
 
     # Write the plaintext, keyword, and result to the display 
     d.write(retVal[2], 0)
     d.write(retVal[3], 1)
     d.write(retVal[0], 2)
-
+    """
 
     # after writing stuff to the display object, this needs to be called to blit the information over to the main display surface
     d.displayText(DISPLAYSURF)
