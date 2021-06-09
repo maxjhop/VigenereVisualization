@@ -17,7 +17,7 @@ this system as a teaching tool:
 3. This system was created as the final submission for Project 2 in CIS 422, Spring 2021, with Professor Anthony Hornof.
 
 4. To run the system, simply navigate to the `executable` folder and run `VigenereVisualization.exe`. This 
-will start the program.
+will start the program. If this does not work, you may run the program by running `main.py`.
    
 5. This project was programmed in Python 3.9.5 using pygame 2.0.1
 
