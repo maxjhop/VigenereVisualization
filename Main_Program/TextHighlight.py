@@ -141,12 +141,12 @@ def main():
                 if event.type == pg.QUIT: sys.exit()
             #screen.fill(pg.Color("white"))
             screen.blit(text.screen, (0, 0))
-            text.highlight(i)
+            text.highlight(i,0)
             text.write_letter(cipher[2],cipher[3],cipher[0])
             time.sleep(second)
             pg.display.update()
         
             
     
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
